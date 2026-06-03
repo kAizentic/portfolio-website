@@ -173,6 +173,39 @@ describe("visualMapping", () => {
     expect(m.translateZ).toBeCloseTo(motionTokens.translateZAt.far, 8);
     expect(m.pointerEvents).toBe("none");
   });
+  it("holds opacity high at the anchor midpoint (convex falloff fills the grey-flash trough)", () => {
+    // Midpoint between adjacent anchors: |rel| = sceneGap / 2.
+    const mid = motionTokens.sceneGap / 2;
+    const t = mid / motionTokens.windowRadius;
+    const m = visualMapping(mid, motionTokens);
+
+    // Opacity follows t^p, not linear t.
+    const expectedOpacity =
+      motionTokens.opacityAt.focus +
+      (motionTokens.opacityAt.far - motionTokens.opacityAt.focus) *
+        Math.pow(t, motionTokens.opacityFalloffExponent);
+    expect(m.opacity).toBeCloseTo(expectedOpacity, 8);
+
+    // It is well above the old linear value (1 - t ≈ 0.444), which is what
+    // produced the dark-backdrop showthrough on fast scroll.
+    expect(m.opacity).toBeGreaterThan(0.85);
+
+    // Two overlapping midpoint panels cover ≥99% of the backdrop.
+    const combinedCoverage = 1 - Math.pow(1 - m.opacity, 2);
+    expect(combinedCoverage).toBeGreaterThan(0.99);
+
+    // Scale/blur stay on the linear ramp (exponent is opacity-only).
+    expect(m.scale).toBeCloseTo(
+      motionTokens.scaleAt.focus +
+        (motionTokens.scaleAt.far - motionTokens.scaleAt.focus) * t,
+      8
+    );
+    expect(m.blurPx).toBeCloseTo(
+      motionTokens.blurPxAt.focus +
+        (motionTokens.blurPxAt.far - motionTokens.blurPxAt.focus) * t,
+      8
+    );
+  });
   it("reduced-motion mapping pins scale and blur to focus", () => {
     const m = visualMappingReducedMotion(motionTokens.windowRadius, motionTokens);
     expect(m.scale).toBe(motionTokens.scaleAt.focus);

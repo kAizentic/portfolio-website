@@ -12,7 +12,9 @@
  *
  * Loop arithmetic check (with the defaults):
  *   sceneGap = 1000, scenes.length = 6  ⇒  L = 6000
- *   windowRadius = 1800                 ⇒  windowRadius < L/2 = 3000   ✓ I-1
+ *   windowRadius = 900                  ⇒  windowRadius < L/2 = 3000   ✓ I-1
+ *                                       ⇒  windowRadius < sceneGap = 1000, so adjacent
+ *                                          frames are fully invisible when parked
  *   focusEpsilon = 220                  ⇒  focusEpsilon < sceneGap/2 = 500 ✓ I-2
  *   translateZAt.focus = 0                                              ✓ I-3
  *   physicalLoopCopies = 7              ⇒  ≥ 5                          ✓ I-4
@@ -29,9 +31,17 @@ import type { MotionTokens } from "@/types/spatial";
 
 export const motionTokens: MotionTokens = {
   sceneGap: 1000,
-  pxPerDepthUnit: 1.5,
+  pxPerDepthUnit: 2.5,
   focalPlane: 0,
-  windowRadius: 1800,
+  windowRadius: 900,
+  /**
+   * Convex opacity falloff (p=4): scenes hold near-full opacity through the
+   * midpoint between anchors, eliminating the dark-backdrop "grey flash" on
+   * fast scroll, then fade fast near windowRadius so docked scenes still show
+   * no neighbor bleed. Opacity-only; scale/blur stay linear. Tuning dial:
+   * 2 = gentle, 3 = balanced, 4 = aggressive (~1% midpoint showthrough).
+   */
+  opacityFalloffExponent: 4,
   focusEpsilon: 220,
   perspective: 1400,
 
@@ -41,9 +51,9 @@ export const motionTokens: MotionTokens = {
     safeBandHalfWidth: 1,
   },
 
-  scaleAt: { focus: 1, far: 0.55 },
+  scaleAt: { focus: 1, far: 0.88 },
   opacityAt: { focus: 1, far: 0 },
-  blurPxAt: { focus: 0, far: 14 },
+  blurPxAt: { focus: 0, far: 8 },
   translateZAt: { focus: 0, far: 600 },
 
   snap: {
@@ -83,8 +93,8 @@ export const motionTokens: MotionTokens = {
   manualTravel: {
     /** Lenis wheelMultiplier (was implicit 1.0). Raises px/scroll without sceneGap changes. */
     inputGain: 1.35,
-    /** Default −1: scrolling UP advances forward (rail-camera convention). */
-    forwardScrollSign: -1,
+    /** Default +1: scrolling DOWN advances forward (document convention). */
+    forwardScrollSign: 1,
     commitThresholdRatio: 0.22,
     /** ~0.72s: visible brake into dock; faster than menu hops, slower than old 0.5s snap. */
     assistedDockDurationSeconds: 0.72,

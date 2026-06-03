@@ -81,6 +81,14 @@ export interface MotionTokens {
   focalPlane: number;
   /** |relativeDepth| at which an anchor is fully attenuated. */
   windowRadius: number;
+  /**
+   * Exponent shaping the opacity-only falloff: opacity = lerp(focus, far, t^p)
+   * where t = |rel| / windowRadius. p > 1 holds opacity high through the
+   * midpoint between anchors (so the dark backdrop does not flash through on
+   * fast scroll) while leaving docked scenes fully clean. Scale/blur/translateZ
+   * keep the linear `t`. p = 1 reproduces the original linear curve.
+   */
+  opacityFalloffExponent: number;
   /** |relativeDepth| below which the encounter accepts pointer input. */
   focusEpsilon: number;
   /** CSS perspective applied to the encounter field. */

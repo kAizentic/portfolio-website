@@ -290,6 +290,7 @@ export const visualMapping = (
   tokens: Pick<
     MotionTokens,
     | "windowRadius"
+    | "opacityFalloffExponent"
     | "focusEpsilon"
     | "opacityAt"
     | "scaleAt"
@@ -299,7 +300,10 @@ export const visualMapping = (
 ): VisualMapping => {
   const absRel = Math.abs(rel);
   const t = clamp(absRel / tokens.windowRadius, 0, 1);
-  const opacity = lerp(tokens.opacityAt.focus, tokens.opacityAt.far, t);
+  // Opacity uses a convex curve (t^p) so the midpoint between anchors stays
+  // covered; scale/blur/translateZ keep the linear `t`.
+  const tOpacity = Math.pow(t, tokens.opacityFalloffExponent);
+  const opacity = lerp(tokens.opacityAt.focus, tokens.opacityAt.far, tOpacity);
   const scale = lerp(tokens.scaleAt.focus, tokens.scaleAt.far, t);
   const blurPx = lerp(tokens.blurPxAt.focus, tokens.blurPxAt.far, t);
   const translateZMagnitude = lerp(
@@ -323,6 +327,7 @@ export const visualMappingReducedMotion = (
   tokens: Pick<
     MotionTokens,
     | "windowRadius"
+    | "opacityFalloffExponent"
     | "focusEpsilon"
     | "opacityAt"
     | "scaleAt"
@@ -331,7 +336,8 @@ export const visualMappingReducedMotion = (
 ): VisualMapping => {
   const absRel = Math.abs(rel);
   const t = clamp(absRel / tokens.windowRadius, 0, 1);
-  const opacity = lerp(tokens.opacityAt.focus, tokens.opacityAt.far, t);
+  const tOpacity = Math.pow(t, tokens.opacityFalloffExponent);
+  const opacity = lerp(tokens.opacityAt.focus, tokens.opacityAt.far, tOpacity);
   const pointerEvents: "auto" | "none" =
     absRel < tokens.focusEpsilon ? "auto" : "none";
   return {

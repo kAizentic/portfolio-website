@@ -1,0 +1,69 @@
+"use client";
+
+import type { SceneRenderContext } from "@/types/spatial";
+
+const services = [
+  {
+    label: "Brand Identity",
+    description:
+      "Visual systems, naming, and brand architecture that define how you're perceived in the world.",
+  },
+  {
+    label: "Digital Experience",
+    description:
+      "Websites, apps, and interactive platforms built for lasting impact and meaningful usability.",
+  },
+  {
+    label: "Motion Design",
+    description:
+      "Animation and spatial narratives that bring static concepts to life with purpose and precision.",
+  },
+  {
+    label: "Creative Strategy",
+    description:
+      "Research, positioning, and direction that aligns aesthetic decisions with business goals.",
+  },
+];
+
+export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
+  return (
+    <div className="absolute inset-0 flex flex-col justify-center">
+      <div className="mx-auto w-full max-w-5xl px-6 sm:px-12 lg:px-20">
+        <div className="mb-8">
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-accent">
+            Capabilities
+          </p>
+          <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
+            What We Do
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {services.map((service, i) => (
+            <div
+              key={service.label}
+              className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-6 transition-all duration-500"
+              style={{
+                opacity: ctx.focused ? 1 : 0.65,
+                transitionDelay: ctx.focused ? `${i * 50}ms` : "0ms",
+              }}
+            >
+              <div className="mb-3 flex items-center gap-2.5">
+                <span
+                  className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent"
+                  style={{ opacity: ctx.focused ? 1 : 0.5 }}
+                />
+                <h3 className="font-display text-[14px] font-medium text-white">
+                  {service.label}
+                </h3>
+              </div>
+              <p className="text-[13px] leading-[1.7] text-white/40">
+                {service.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

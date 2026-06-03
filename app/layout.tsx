@@ -1,26 +1,30 @@
 import type { Metadata } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-/**
- * Root layout for the spatial site template (diagnostic prototype).
- *
- * Intentionally minimal: no production typography, no branded metadata.
- * The page body is owned by SpatialViewport which wraps its own
- * <ReactLenis root>. We keep `body` overflow visible so Lenis can drive
- * the natural document scroll.
- */
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Spatial Site Template — Diagnostic Prototype",
-  description:
-    "Rail-camera spatial interaction prototype. Diagnostic mode only; no portfolio content.",
+  title: "Forma — Creative Studio",
+  description: "An independent design studio building brands, products, and spatial narratives.",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className="font-mono antialiased">{children}</body>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`} style={{ backgroundColor: '#050507' }}>
+      <body className="font-sans antialiased bg-[#050507]">{children}</body>
     </html>
   );
 }

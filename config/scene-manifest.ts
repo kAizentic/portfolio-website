@@ -1,51 +1,40 @@
-/**
- * Anonymous encounter anchors for the rail-camera prototype.
- *
- * These are deliberately content-free placeholders. The diagnostic build
- * uses the navLabel for identification only; meaning is supplied later via
- * an injected `renderSceneContent` for future skeleton/production modes.
- *
- * Anchor positions are derived from `anchorIndex * sceneGap` at runtime —
- * no scene encodes a depth value of its own.
- */
-
 import type { SceneManifestEntry } from "@/types/spatial";
 
 export const sceneManifest: SceneManifestEntry[] = [
   {
     id: "scene-01",
-    navLabel: "01",
+    navLabel: "Hero",
     anchorIndex: 0,
-    diagnosticLabel: "Encounter anchor 01",
+    diagnosticLabel: "Hero — brand statement",
   },
   {
     id: "scene-02",
-    navLabel: "02",
+    navLabel: "Work",
     anchorIndex: 1,
-    diagnosticLabel: "Encounter anchor 02",
+    diagnosticLabel: "Work — selected projects",
   },
   {
     id: "scene-03",
-    navLabel: "03",
+    navLabel: "Services",
     anchorIndex: 2,
-    diagnosticLabel: "Encounter anchor 03",
+    diagnosticLabel: "Services — capabilities",
   },
   {
     id: "scene-04",
-    navLabel: "04",
+    navLabel: "About",
     anchorIndex: 3,
-    diagnosticLabel: "Encounter anchor 04",
+    diagnosticLabel: "About — studio story",
   },
   {
     id: "scene-05",
-    navLabel: "05",
+    navLabel: "Process",
     anchorIndex: 4,
-    diagnosticLabel: "Encounter anchor 05",
+    diagnosticLabel: "Process — methodology",
   },
   {
     id: "scene-06",
-    navLabel: "06",
+    navLabel: "Contact",
     anchorIndex: 5,
-    diagnosticLabel: "Encounter anchor 06",
+    diagnosticLabel: "Contact — get in touch",
   },
 ];

@@ -33,8 +33,8 @@ const postMultiplierDeltaY = (
 ): number => rawDeltaY * forwardScrollSign * inputGain;
 
 describe("forwardScrollSign — bundled token", () => {
-  it("defaults to -1 so scrolling UP advances forward (rail-camera convention)", () => {
-    expect(motionTokens.manualTravel.forwardScrollSign).toBe(-1);
+  it("defaults to +1 so scrolling DOWN advances forward (document convention)", () => {
+    expect(motionTokens.manualTravel.forwardScrollSign).toBe(1);
   });
 });
 

@@ -53,9 +53,9 @@ test("keyboard travel arrival enters docked hold", async ({ page }) => {
   await waitForInitialized(page);
   await waitForDockedHold(page);
 
-  // ArrowUp is the forward key under the rail-camera mapping
-  // (motion.manualTravel.forwardScrollSign === -1).
-  await page.keyboard.press("ArrowUp");
+  // ArrowDown is the forward key under the document convention
+  // (motion.manualTravel.forwardScrollSign === +1).
+  await page.keyboard.press("ArrowDown");
   await waitForNavState(page, ["dockedHold"], 15_000);
 
   const s = await readState(page);

@@ -55,15 +55,22 @@ export function SceneFrame({ scene }: SceneFrameProps): React.JSX.Element {
     return { eq, rel, mapping };
   };
 
-  const opacity = useTransform(travelDepth, (d) => computeMapping(d).mapping.opacity);
+  // Floor at 0.001 to prevent GPU compositor layer demotion at exactly 0 opacity,
+  // which causes a one-frame white clear-color flash when the layer is re-promoted.
+  const opacity = useTransform(travelDepth, (d) =>
+    Math.max(computeMapping(d).mapping.opacity, 0.001)
+  );
   const scale = useTransform(travelDepth, (d) => computeMapping(d).mapping.scale);
   const translateZ = useTransform(
     travelDepth,
     (d) => computeMapping(d).mapping.translateZ
   );
   const filter = useTransform(travelDepth, (d) => {
-    const px = computeMapping(d).mapping.blurPx;
-    return px <= 0.05 ? "none" : `blur(${px.toFixed(2)}px)`;
+    // Always return a blur() value rather than "none" — switching between
+    // "none" and "blur(x)" changes the GPU compositing path and can produce
+    // a one-frame white artifact. blur(0px) is visually identical to none.
+    const px = Math.max(computeMapping(d).mapping.blurPx, 0);
+    return `blur(${px.toFixed(2)}px)`;
   });
   const pointerEvents = useTransform(
     travelDepth,
@@ -125,7 +132,6 @@ export function SceneFrame({ scene }: SceneFrameProps): React.JSX.Element {
         translateZ,
         filter,
         pointerEvents,
-        transformStyle: "preserve-3d",
         willChange: "transform, opacity, filter",
       }}
     >
