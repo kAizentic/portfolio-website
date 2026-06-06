@@ -1,12 +1,23 @@
 "use client";
 
-import { ThreadsBackground } from "@/components/visual-effects/ThreadsBackground";
+import { LiquidEtherBackground } from "@/components/visual-effects/LiquidEtherBackground";
+import { GradientText } from "@/components/visual-effects/GradientText";
+import { ShinyText } from "@/components/visual-effects/ShinyText";
+import { useSpatialController } from "@/components/spatial/SpatialControllerContext";
 import type { SceneRenderContext } from "@/types/spatial";
 
 export function Scene01Hero({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
+  const { actions, config } = useSpatialController();
+  // Derive anchors from the manifest rather than hardcoding indices.
+  // travelTo routes through closestEquivalentAnchor on the looped rail.
+  const workIndex =
+    config.scenes.find((s) => s.navLabel === "Work")?.anchorIndex ?? 0;
+  const contactIndex =
+    config.scenes.find((s) => s.navLabel === "Contact")?.anchorIndex ?? 0;
+
   return (
     <div className="absolute inset-0">
-      <ThreadsBackground />
+      <LiquidEtherBackground />
 
       <div className="relative z-10 flex h-full flex-col justify-center">
         <div className="mx-auto w-full max-w-6xl px-6 sm:px-12 lg:px-20">
@@ -14,50 +25,57 @@ export function Scene01Hero({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
             className="mb-8 flex items-center gap-3 transition-all duration-500"
             style={{ opacity: ctx.focused ? 1 : 0.45 }}
           >
-            <span className="h-px w-10 bg-accent" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-accent">
-              Creative Studio
+            <span className="font-mono text-[22px] uppercase tracking-[0.2em] text-accent">
+              <ShinyText text="Michael Ryan McConnell" />
             </span>
           </div>
 
           <h1
-            className="max-w-[640px] font-display text-[64px] font-semibold leading-[1.05] tracking-[-0.03em] text-white transition-all duration-700"
+            className="max-w-[19ch] text-balance font-display text-[clamp(36px,4.4vw,52px)] font-semibold leading-[1.08] tracking-[-0.025em] text-white transition-all duration-700"
             style={{
               opacity: ctx.focused ? 1 : 0.75,
               transform: ctx.focused ? "translateY(0)" : "translateY(8px)",
             }}
           >
-            We craft digital
-            <br />
-            experiences that
-            <br />
-            <span className="text-accent">leave a mark.</span>
+            Product Marketing for{" "}
+            <GradientText>AI, Cloud &amp; Technical B2B Products</GradientText>
           </h1>
 
-          <p
-            className="mt-7 max-w-[480px] text-[17px] leading-[1.75] text-white/50 transition-all duration-500"
+          <div
+            className="mt-7 max-w-[520px] space-y-4 text-[16px] leading-[1.7] text-white/55 transition-all duration-500"
             style={{ opacity: ctx.focused ? 1 : 0.6 }}
           >
-            Forma is an independent design studio building brands, products, and
-            spatial narratives for forward-thinking companies.
-          </p>
+            <p>
+              I help B2B technology companies turn complex products into clear
+              positioning, sharper go-to-market strategy, and digital
+              experiences that move buyers from interest to action.
+            </p>
+            <p>
+              From AI infrastructure and cloud platforms to ecommerce growth and
+              sales enablement, I bring together product marketing, customer
+              journey strategy, competitive research, and AI-enabled workflow
+              design to help teams market technical products with more precision.
+            </p>
+          </div>
 
-          <div className="mt-9 flex items-center gap-5">
+          <div className="mt-10 flex flex-wrap items-center gap-4">
             <button
               type="button"
+              onClick={() => actions.travelTo(workIndex)}
               className="rounded-full bg-accent px-8 py-3.5 text-[13px] font-medium tracking-wide text-white transition-colors hover:bg-accent-hover"
               style={{
                 boxShadow: ctx.focused ? "0 0 36px var(--accent-glow)" : "none",
                 transition: "box-shadow 0.7s ease, background-color 0.2s",
               }}
             >
-              View Our Work
+              View Selected Work
             </button>
             <button
               type="button"
+              onClick={() => actions.travelTo(contactIndex)}
               className="rounded-full border border-white/20 px-8 py-3.5 text-[13px] font-medium tracking-wide text-white/55 transition-colors hover:border-white/40 hover:text-white"
             >
-              Get in Touch
+              Let&apos;s Talk
             </button>
           </div>
         </div>

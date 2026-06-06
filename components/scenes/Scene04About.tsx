@@ -1,11 +1,13 @@
 "use client";
 
+import { CountUp } from "@/components/visual-effects/CountUp";
+import { ShinyText } from "@/components/visual-effects/ShinyText";
 import type { SceneRenderContext } from "@/types/spatial";
 
 const stats = [
-  { value: "8+", label: "Years" },
-  { value: "120", label: "Projects" },
-  { value: "40", label: "Clients" },
+  { value: 12, suffix: "+", label: "Years" },
+  { value: 180, prefix: "$", suffix: "M+", label: "Revenue Driven" },
+  { value: 500, suffix: "K", label: "Customers Acquired" },
 ];
 
 export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
@@ -13,11 +15,11 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
     <div className="absolute inset-0 flex flex-col justify-center">
       <div className="mx-auto w-full max-w-5xl px-6 sm:px-12 lg:px-20">
         <div className="mb-8">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-accent">
-            Studio
+          <p className="mb-3 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
+            <ShinyText text="Profile" />
           </p>
           <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
-            About Forma
+            About Me
           </h2>
         </div>
 
@@ -28,13 +30,16 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
             style={{ opacity: ctx.focused ? 1 : 0.7 }}
           >
             <p className="text-[15px] leading-[1.78] text-white/55">
-              Founded in 2017, Forma is a boutique creative studio operating at
-              the intersection of strategy and craft. We partner with brands who
-              believe design is a competitive advantage.
+              I&apos;m an AI product marketing consultant based in Austin, Texas,
+              helping B2B technology companies turn complex products into clear
+              positioning, sharper go-to-market, and digital experiences that
+              convert.
             </p>
             <p className="text-[14px] leading-[1.75] text-white/38">
-              Our team of eight spans design, engineering, and strategy — with
-              studios in London and New York.
+              Over the past decade I&apos;ve driven growth across Dell&apos;s
+              consumer and financial-services portfolios, led agency delivery for
+              enterprise clients, and now build AI-enabled marketing workflows for
+              Fortune 100 cloud and infrastructure products.
             </p>
           </div>
         </div>
@@ -49,7 +54,9 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
           {stats.map((stat) => (
             <div key={stat.label}>
               <span className="font-display text-[34px] font-semibold text-accent">
-                {stat.value}
+                {stat.prefix}
+                <CountUp to={stat.value} startWhen={ctx.focused} separator="," />
+                {stat.suffix}
               </span>
               <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-white/35">
                 {stat.label}

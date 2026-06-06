@@ -1,12 +1,29 @@
 "use client";
 
+import { ShinyText } from "@/components/visual-effects/ShinyText";
 import type { SceneRenderContext } from "@/types/spatial";
 
 const projects = [
-  { title: "Apex Rebrand", category: "Brand Identity", year: "2025" },
-  { title: "Lumina App", category: "Digital Product", year: "2024" },
-  { title: "Dusk Editorial", category: "Art Direction", year: "2024" },
-  { title: "Strata Platform", category: "Web Experience", year: "2025" },
+  {
+    title: "AI Infrastructure GTM",
+    category: "Fortune 100 · Product Marketing",
+    year: "2024",
+  },
+  {
+    title: "Dell Financial Services",
+    category: "$104M new revenue · Merchandising",
+    year: "2023",
+  },
+  {
+    title: "Dell Consumer Ecommerce",
+    category: "$76M portfolio · Ecommerce",
+    year: "2020",
+  },
+  {
+    title: "Enterprise Digital Experiences",
+    category: "Agency delivery · Digital Strategy",
+    year: "2015",
+  },
 ];
 
 export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
@@ -15,15 +32,15 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
       <div className="mx-auto w-full max-w-6xl px-6 sm:px-12 lg:px-20">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.3em] text-accent">
-              Portfolio
+            <p className="mb-2 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
+              <ShinyText text="Portfolio" />
             </p>
             <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
               Selected Work
             </h2>
           </div>
           <span className="mb-1 font-mono text-[11px] uppercase tracking-[0.25em] text-white/25">
-            04 Projects
+            2014 – Present
           </span>
         </div>
 

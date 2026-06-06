@@ -1,0 +1,20 @@
+<!--
+  Static form definition for Netlify Forms detection.
+  Netlify's build bot parses this file to register the "contact" form, since the
+  live form is client-rendered (Scene06Contact.tsx) and not visible at build time.
+  The React form submits to this same form via fetch POST.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+      <input name="bot-field" />
+    </form>
+  </body>
+</html>

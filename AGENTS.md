@@ -60,3 +60,52 @@ Until lifted by explicit direction, do not introduce:
 
 The placeholder panels in `components/scenes/ScenePlaceholder.tsx` exist
 for measurement; do not embellish them with environmental visuals.
+
+## Visual effects (WebGL backgrounds)
+
+WebGL background effects (e.g. the hero's `LiquidEther`) live in
+`components/visual-effects/`. The established pattern, when adding a new
+one, is a **raw effect component** plus a **host wrapper** — see
+`LiquidEther.jsx` (the three.js fluid renderer, vendored verbatim from
+React Bits) and `LiquidEtherBackground.tsx` (the host) as the reference
+implementation.
+
+**Rendering scope.** Plain **three.js** or **OGL** / raw GLSL shaders are
+permitted (`three` is the current graphics dependency; `ogl` is also
+fine). **React Three Fiber is still barred** — see the scope ceiling
+above; `LiquidEther` uses three.js directly, not R3F. Most copy-in
+effects come from React Bits (reactbits.dev) already shaped as React
+components; porting a Shadertoy/CodePen shader means wrapping it the same
+way.
+
+**Vendored components.** Large copy-in effects (like `LiquidEther.jsx`)
+are kept verbatim as untyped `.jsx` with `"use client"` and a top-level
+`/* eslint-disable */` + MIT attribution comment, so the upstream source
+stays diff-able. They are excluded from strict typechecking by virtue of
+not being `.ts`/`.tsx`. Do the React/Next adaptation (SSR gating, a11y,
+memoization) in the `.tsx` host wrapper, never by editing the vendored
+file.
+
+**Host wrapper conventions** (all four matter — `ThreadsBackground.tsx`
+demonstrates each):
+
+1. **Client-only.** Load the renderer with
+   `dynamic(() => import("./Effect"), { ssr: false })` — WebGL needs a
+   real canvas and cannot server-render.
+2. **Reduced-motion gate.** Call `useReducedMotion()` and return `null`
+   when the user prefers reduced motion. Do not render a paused canvas.
+3. **Background, not foreground.** Mount as an absolute layer behind
+   content: `pointer-events-none absolute inset-0 z-0`, `aria-hidden`,
+   and `hidden sm:block` to skip the GPU cost on small screens.
+4. **Stable props + memo.** `memo` the wrapper so unrelated parent
+   re-renders do not re-init the GL context, and **hoist any
+   array/object prop** (e.g. the color tuple) to a module constant — a
+   fresh literal each render re-fires the renderer's uniform-update
+   effect.
+
+Place the wrapper inside the relevant scene as a background layer (the
+hero mounts `<ThreadsBackground />` first in `Scene01Hero.tsx`), never
+inside `ScenePlaceholder.tsx`.
+
+Check the source's license before copying (React Bits is MIT); add a
+one-line attribution comment at the top of the ported component.

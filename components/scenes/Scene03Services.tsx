@@ -1,27 +1,28 @@
 "use client";
 
+import { ShinyText } from "@/components/visual-effects/ShinyText";
 import type { SceneRenderContext } from "@/types/spatial";
 
 const services = [
   {
-    label: "Brand Identity",
+    label: "Product Marketing",
     description:
-      "Visual systems, naming, and brand architecture that define how you're perceived in the world.",
+      "Positioning, messaging, and content that make complex AI, cloud, and technical products clear to the people who buy them.",
+  },
+  {
+    label: "Go-to-Market Strategy",
+    description:
+      "Market intelligence, planning, and sales enablement that move buyers from interest to action across the funnel.",
+  },
+  {
+    label: "AI-Enabled Workflows",
+    description:
+      "Agentic systems that systematize research, competitive analysis, content production, and GTM execution at scale.",
   },
   {
     label: "Digital Experience",
     description:
-      "Websites, apps, and interactive platforms built for lasting impact and meaningful usability.",
-  },
-  {
-    label: "Motion Design",
-    description:
-      "Animation and spatial narratives that bring static concepts to life with purpose and precision.",
-  },
-  {
-    label: "Creative Strategy",
-    description:
-      "Research, positioning, and direction that aligns aesthetic decisions with business goals.",
+      "Branded digital experiences, buyer journeys, and conversion optimization built on a decade of ecommerce growth.",
   },
 ];
 
@@ -30,11 +31,11 @@ export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX
     <div className="absolute inset-0 flex flex-col justify-center">
       <div className="mx-auto w-full max-w-5xl px-6 sm:px-12 lg:px-20">
         <div className="mb-8">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-accent">
-            Capabilities
+          <p className="mb-3 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
+            <ShinyText text="Capabilities" />
           </p>
           <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
-            What We Do
+            What I Do
           </h2>
         </div>
 

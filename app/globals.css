@@ -36,6 +36,277 @@
 }
 
 /*
+ * Shiny text effect (React Bits). A bright highlight band sweeps across the
+ * text, which is painted by a gradient clipped to the glyphs. Tinted to the
+ * brand accent so eyebrow labels keep their violet identity. Falls back to the
+ * element's own `text-accent` color where background-clip: text is unsupported.
+ */
+.shiny-text {
+  display: inline-block;
+  background: linear-gradient(
+    120deg,
+    var(--accent) 40%,
+    #ffffff 50%,
+    var(--accent) 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shiny-text-shine 5s linear infinite;
+}
+
+@keyframes shiny-text-shine {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: -100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shiny-text {
+    animation: none;
+  }
+}
+
+/*
+ * Animated gradient text (React Bits). A multi-stop gradient is clipped to the
+ * glyphs and slides horizontally, giving the text a slow shifting sheen.
+ */
+.gradient-text {
+  display: inline-block;
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: gradient-text-move linear infinite;
+}
+
+@keyframes gradient-text-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-text {
+    animation: none;
+  }
+}
+
+/*
+ * Gooey navigation (React Bits), tinted to the brand accent. The metaball merge
+ * uses an SVG alpha-channel filter (#gooey-nav-goo) rather than CSS
+ * blur + contrast — sharpening alpha instead of RGB keeps the blob's color, so
+ * the pill and particles can be violet. The active label sits white on the
+ * accent pill. (See the inline <svg> filter def in SceneNav.tsx.)
+ */
+.gooey-nav-container {
+  position: relative;
+  display: inline-block;
+  --color-1: #7c3aed;
+  --color-2: #a78bfa;
+  --color-3: #c084fc;
+  --color-4: #6366f1;
+}
+
+.gooey-nav-container ul {
+  display: flex;
+  gap: 0.5em;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: 3;
+  color: white;
+}
+
+.gooey-nav-container ul li {
+  position: relative;
+  border-radius: 100vw;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.gooey-nav-container ul li button {
+  display: inline-block;
+  padding: 0.55em 1.1em;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: uppercase;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gooey-nav-container ul li button:disabled {
+  cursor: not-allowed;
+}
+
+.gooey-nav-container ul li::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 100vw;
+  background: var(--accent);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.gooey-nav-container ul li.active {
+  color: white;
+}
+
+.gooey-nav-container ul li.active::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.gooey-nav-container .effect {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  opacity: 1;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+.gooey-nav-container .effect.text {
+  color: white;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.gooey-nav-container .effect.text.active {
+  color: white;
+}
+
+.gooey-nav-container .effect.filter {
+  filter: url(#gooey-nav-goo);
+}
+
+.gooey-nav-container .effect.filter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scale(0);
+  opacity: 0;
+  z-index: -1;
+  border-radius: 100vw;
+}
+
+.gooey-nav-container .effect.active::after {
+  animation: gooey-pill 0.3s ease both;
+}
+
+@keyframes gooey-pill {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.gooey-nav-container .particle,
+.gooey-nav-container .point {
+  display: block;
+  opacity: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  transform-origin: center;
+}
+
+.gooey-nav-container .particle {
+  --time: 5s;
+  position: absolute;
+  top: calc(50% - 8px);
+  left: calc(50% - 8px);
+  animation: gooey-particle calc(var(--time)) ease 1 -350ms;
+}
+
+.gooey-nav-container .point {
+  background: var(--color);
+  opacity: 1;
+  animation: gooey-point calc(var(--time)) ease 1 -350ms;
+}
+
+@keyframes gooey-particle {
+  0% {
+    transform: rotate(0deg) translate(calc(var(--start-x)), calc(var(--start-y)));
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  70% {
+    transform: rotate(calc(var(--rotate) * 0.5))
+      translate(calc(var(--end-x) * 1.2), calc(var(--end-y) * 1.2));
+    opacity: 1;
+    animation-timing-function: ease;
+  }
+  85% {
+    transform: rotate(calc(var(--rotate) * 0.66))
+      translate(calc(var(--end-x)), calc(var(--end-y)));
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(calc(var(--rotate) * 1.2))
+      translate(calc(var(--end-x) * 0.5), calc(var(--end-y) * 0.5));
+    opacity: 1;
+  }
+}
+
+@keyframes gooey-point {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  25% {
+    transform: scale(calc(var(--scale) * 0.25));
+  }
+  38% {
+    opacity: 1;
+  }
+  65% {
+    transform: scale(var(--scale));
+    opacity: 1;
+    animation-timing-function: ease;
+  }
+  85% {
+    transform: scale(var(--scale));
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gooey-nav-container .effect.filter {
+    display: none;
+  }
+}
+
+/*
  * Lenis-required document rules. The wrapper (window) needs natural scroll
  * with no anchored snap behavior. We also set color-scheme so the native
  * scrollbar matches the rail-camera dark surface.

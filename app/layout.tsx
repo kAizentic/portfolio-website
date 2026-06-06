@@ -15,8 +15,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Forma — Creative Studio",
-  description: "An independent design studio building brands, products, and spatial narratives.",
+  title: "Michael Ryan McConnell — AI Product Marketing Consultant",
+  description:
+    "AI product marketing consultant helping B2B technology companies with positioning, go-to-market strategy, and digital experiences for AI, cloud, and technical products.",
 };
 
 export default function RootLayout({

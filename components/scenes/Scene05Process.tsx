@@ -1,5 +1,6 @@
 "use client";
 
+import { ShinyText } from "@/components/visual-effects/ShinyText";
 import type { SceneRenderContext } from "@/types/spatial";
 
 const steps = [
@@ -7,25 +8,25 @@ const steps = [
     num: "01",
     title: "Research",
     description:
-      "Audience analysis, competitive landscape, and opportunity mapping to ground every decision in reality.",
+      "Market intelligence, competitive analysis, and audience research — accelerated with AI-enabled workflows.",
   },
   {
     num: "02",
-    title: "Strategy",
+    title: "Positioning",
     description:
-      "Positioning, narrative architecture, and creative direction aligned with your long-term objectives.",
+      "Positioning, messaging, and narrative that make complex technical products clear and compelling.",
   },
   {
     num: "03",
-    title: "Design",
+    title: "Activation",
     description:
-      "Visual identity, system building, and iterative prototyping toward a refined final output.",
+      "Briefs, whitepapers, video, and digital experiences that power go-to-market and sales enablement.",
   },
   {
     num: "04",
-    title: "Launch",
+    title: "Optimization",
     description:
-      "Delivery, technical handoff, and post-launch refinement support to ensure a successful rollout.",
+      "Performance analysis and conversion optimization to refine buyer journeys after launch.",
   },
 ];
 
@@ -34,11 +35,11 @@ export function Scene05Process({ ctx }: { ctx: SceneRenderContext }): React.JSX.
     <div className="absolute inset-0 flex flex-col justify-center">
       <div className="mx-auto w-full max-w-4xl px-6 sm:px-12 lg:px-20">
         <div className="mb-8">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-accent">
-            Methodology
+          <p className="mb-3 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
+            <ShinyText text="Methodology" />
           </p>
           <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
-            How We Work
+            How I Work
           </h2>
         </div>
 
