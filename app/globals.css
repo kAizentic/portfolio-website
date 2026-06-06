@@ -307,6 +307,62 @@
 }
 
 /*
+ * Glare hover (React Bits). A diagonal highlight band sweeps across the box on
+ * hover. The wrapper supplies size/radius/overflow via the caller's classes;
+ * the glare is a clipped ::before overlay driven by CSS vars set inline.
+ */
+.glare-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.glare-hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    var(--gh-angle, -45deg),
+    hsla(0, 0%, 0%, 0) 60%,
+    var(--gh-rgba, rgba(255, 255, 255, 0.5)) 70%,
+    hsla(0, 0%, 0%, 0),
+    hsla(0, 0%, 0%, 0) 100%
+  );
+  transition: var(--gh-duration, 650ms) ease;
+  background-size:
+    var(--gh-size, 250%) var(--gh-size, 250%),
+    100% 100%;
+  background-repeat: no-repeat;
+  background-position:
+    -100% -100%,
+    0 0;
+}
+
+.glare-hover:hover::before {
+  background-position:
+    100% 100%,
+    0 0;
+}
+
+.glare-hover--play-once::before {
+  transition: none;
+}
+
+.glare-hover--play-once:hover::before {
+  transition: var(--gh-duration, 650ms) ease;
+  background-position:
+    100% 100%,
+    0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glare-hover::before {
+    transition: none;
+  }
+}
+
+/*
  * Lenis-required document rules. The wrapper (window) needs natural scroll
  * with no anchored snap behavior. We also set color-scheme so the native
  * scrollbar matches the rail-camera dark surface.

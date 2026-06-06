@@ -193,7 +193,7 @@ export function SceneNav(): React.JSX.Element | null {
     <nav
       data-testid="scene-nav"
       aria-label="Encounter anchor index"
-      className="fixed inset-x-0 top-0 z-30 flex justify-center border-b border-white/10 bg-black/55 py-3 backdrop-blur-md"
+      className="fixed inset-x-0 top-0 z-30 flex justify-center border-b border-white/10 bg-black/55 py-8 backdrop-blur-md"
     >
       <div
         ref={containerRef}

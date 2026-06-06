@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "motion/react";
+
 import { LiquidEtherBackground } from "@/components/visual-effects/LiquidEtherBackground";
 import { GradientText } from "@/components/visual-effects/GradientText";
 import { ShinyText } from "@/components/visual-effects/ShinyText";
@@ -41,9 +43,11 @@ export function Scene01Hero({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
             <GradientText>AI, Cloud &amp; Technical B2B Products</GradientText>
           </h1>
 
-          <div
-            className="mt-7 max-w-[520px] space-y-4 text-[16px] leading-[1.7] text-white/55 transition-all duration-500"
-            style={{ opacity: ctx.focused ? 1 : 0.6 }}
+          <motion.div
+            className="mt-7 max-w-[520px] space-y-4 text-[16px] leading-[1.7] text-white/55"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: ctx.focused ? 1 : 0, y: ctx.focused ? 0 : 8 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
             <p>
               I help B2B technology companies turn complex products into clear
@@ -56,9 +60,14 @@ export function Scene01Hero({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
               journey strategy, competitive research, and AI-enabled workflow
               design to help teams market technical products with more precision.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <motion.div
+            className="mt-10 flex flex-wrap items-center gap-4"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: ctx.focused ? 1 : 0, y: ctx.focused ? 0 : 8 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.25 }}
+          >
             <button
               type="button"
               onClick={() => actions.travelTo(workIndex)}
@@ -77,7 +86,7 @@ export function Scene01Hero({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
             >
               Let&apos;s Talk
             </button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

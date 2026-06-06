@@ -1,6 +1,7 @@
 "use client";
 
 import { ShinyText } from "@/components/visual-effects/ShinyText";
+import { TiltedCard } from "@/components/visual-effects/TiltedCard";
 import type { SceneRenderContext } from "@/types/spatial";
 
 const services = [
@@ -41,27 +42,28 @@ export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {services.map((service, i) => (
-            <div
-              key={service.label}
-              className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-6 transition-all duration-500"
-              style={{
-                opacity: ctx.focused ? 1 : 0.65,
-                transitionDelay: ctx.focused ? `${i * 50}ms` : "0ms",
-              }}
-            >
-              <div className="mb-3 flex items-center gap-2.5">
-                <span
-                  className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent"
-                  style={{ opacity: ctx.focused ? 1 : 0.5 }}
-                />
-                <h3 className="font-display text-[14px] font-medium text-white">
-                  {service.label}
-                </h3>
+            <TiltedCard key={service.label}>
+              <div
+                className="h-full rounded-2xl border border-white/[0.07] bg-white/[0.03] p-6 transition-all duration-500"
+                style={{
+                  opacity: ctx.focused ? 1 : 0.65,
+                  transitionDelay: ctx.focused ? `${i * 50}ms` : "0ms",
+                }}
+              >
+                <div className="mb-3 flex items-center gap-2.5">
+                  <span
+                    className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent"
+                    style={{ opacity: ctx.focused ? 1 : 0.5 }}
+                  />
+                  <h3 className="font-display text-[14px] font-medium text-white">
+                    {service.label}
+                  </h3>
+                </div>
+                <p className="text-[13px] leading-[1.7] text-white/40">
+                  {service.description}
+                </p>
               </div>
-              <p className="text-[13px] leading-[1.7] text-white/40">
-                {service.description}
-              </p>
-            </div>
+            </TiltedCard>
           ))}
         </div>
       </div>

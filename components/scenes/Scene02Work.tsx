@@ -1,28 +1,29 @@
 "use client";
 
 import { ShinyText } from "@/components/visual-effects/ShinyText";
+import { TiltedCard } from "@/components/visual-effects/TiltedCard";
 import type { SceneRenderContext } from "@/types/spatial";
 
 const projects = [
   {
     title: "AI Infrastructure GTM",
-    category: "Fortune 100 · Product Marketing",
+    category: "GPU-efficiency positioning · brief in <2 days",
     year: "2024",
   },
   {
     title: "Dell Financial Services",
-    category: "$104M new revenue · Merchandising",
+    category: "+$104M new revenue · 500K customers acquired",
     year: "2023",
   },
   {
-    title: "Dell Consumer Ecommerce",
-    category: "$76M portfolio · Ecommerce",
-    year: "2020",
+    title: "Premium Financing Launches",
+    category: "+1,200 bps average financing penetration",
+    year: "2022",
   },
   {
-    title: "Enterprise Digital Experiences",
-    category: "Agency delivery · Digital Strategy",
-    year: "2015",
+    title: "Consumer Ecommerce Merchandising",
+    category: "$76M portfolio · +20% YoY holiday margin",
+    year: "2020",
   },
 ];
 
@@ -46,25 +47,26 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {projects.map((project) => (
-            <div
-              key={project.title}
-              className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.05]"
-              style={{
-                opacity: ctx.focused ? 1 : 0.7,
-                transition: "opacity 0.5s ease, border-color 0.2s, background-color 0.2s",
-              }}
-            >
-              <div className="mb-4 h-[110px] rounded-xl bg-white/[0.05] transition-colors group-hover:bg-white/[0.08]" />
-              <div className="flex items-end justify-between">
-                <div>
-                  <h3 className="font-display text-[14px] font-medium text-white">
-                    {project.title}
-                  </h3>
-                  <span className="text-[12px] text-white/35">{project.category}</span>
+            <TiltedCard key={project.title}>
+              <div
+                className="group h-full rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.05]"
+                style={{
+                  opacity: ctx.focused ? 1 : 0.7,
+                  transition: "opacity 0.5s ease, border-color 0.2s, background-color 0.2s",
+                }}
+              >
+                <div className="mb-4 h-[110px] rounded-xl bg-white/[0.05] transition-colors group-hover:bg-white/[0.08]" />
+                <div className="flex items-end justify-between">
+                  <div>
+                    <h3 className="font-display text-[14px] font-medium text-white">
+                      {project.title}
+                    </h3>
+                    <span className="text-[12px] text-white/35">{project.category}</span>
+                  </div>
+                  <span className="font-mono text-[11px] text-white/20">{project.year}</span>
                 </div>
-                <span className="font-mono text-[11px] text-white/20">{project.year}</span>
               </div>
-            </div>
+            </TiltedCard>
           ))}
         </div>
       </div>

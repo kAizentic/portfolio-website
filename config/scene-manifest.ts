@@ -3,7 +3,7 @@ import type { SceneManifestEntry } from "@/types/spatial";
 export const sceneManifest: SceneManifestEntry[] = [
   {
     id: "scene-01",
-    navLabel: "Hero",
+    navLabel: "Home",
     anchorIndex: 0,
     diagnosticLabel: "Hero — brand statement",
   },

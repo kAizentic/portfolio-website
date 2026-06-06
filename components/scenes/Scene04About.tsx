@@ -1,6 +1,9 @@
 "use client";
 
+import { motion } from "motion/react";
+
 import { CountUp } from "@/components/visual-effects/CountUp";
+import { GlareHover } from "@/components/visual-effects/GlareHover";
 import { ShinyText } from "@/components/visual-effects/ShinyText";
 import type { SceneRenderContext } from "@/types/spatial";
 
@@ -24,10 +27,23 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
         </div>
 
         <div className="flex flex-col gap-8 sm:flex-row">
-          <div className="h-[180px] w-full flex-shrink-0 rounded-2xl bg-white/[0.05] sm:h-[200px] sm:w-[180px]" />
-          <div
-            className="flex flex-col gap-4 transition-all duration-500"
-            style={{ opacity: ctx.focused ? 1 : 0.7 }}
+          <GlareHover
+            glareOpacity={0.4}
+            glareSize={220}
+            className="h-[220px] w-[180px] flex-shrink-0 rounded-2xl sm:h-[200px] sm:w-[180px]"
+          >
+            <div
+              role="img"
+              aria-label="Michael Ryan McConnell"
+              className="absolute inset-0 bg-white/[0.05] bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: "url(/mrm-portrait.png)" }}
+            />
+          </GlareHover>
+          <motion.div
+            className="flex flex-col gap-4"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: ctx.focused ? 1 : 0, y: ctx.focused ? 0 : 8 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
             <p className="text-[15px] leading-[1.78] text-white/55">
               I&apos;m an AI product marketing consultant based in Austin, Texas,
@@ -41,7 +57,7 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
               enterprise clients, and now build AI-enabled marketing workflows for
               Fortune 100 cloud and infrastructure products.
             </p>
-          </div>
+          </motion.div>
         </div>
 
         <div
