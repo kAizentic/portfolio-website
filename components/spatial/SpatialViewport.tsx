@@ -30,9 +30,6 @@
 import { ReactLenis } from "lenis/react";
 import { useMemo } from "react";
 
-import { EnvironmentLayer } from "@/components/environment/EnvironmentLayer";
-import { EnvironmentProvider } from "@/components/environment/EnvironmentContext";
-import { EnvironmentToggle } from "@/components/environment/EnvironmentToggle";
 import { DiagnosticOverlay } from "@/components/spatial/DiagnosticOverlay";
 import { SceneLayer } from "@/components/spatial/SceneLayer";
 import { SceneNav } from "@/components/spatial/SceneNav";
@@ -95,16 +92,12 @@ export function SpatialViewport({
     >
       <ReactLenis root options={lenisOptions}>
         <SpatialControllerProvider config={config}>
-          <EnvironmentProvider>
-            <ScrollSurface />
-            <EnvironmentLayer />
-            <SceneLayer />
-            <SceneNav />
-            <DiagnosticOverlay />
-            <StandardViewToggle />
-            <EnvironmentToggle />
-            <KeyboardTravelMount />
-          </EnvironmentProvider>
+          <ScrollSurface />
+          <SceneLayer />
+          <SceneNav />
+          <DiagnosticOverlay />
+          <StandardViewToggle />
+          <KeyboardTravelMount />
         </SpatialControllerProvider>
       </ReactLenis>
     </div>
