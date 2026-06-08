@@ -55,14 +55,14 @@ export function Scene05Process({ ctx }: { ctx: SceneRenderContext }): React.JSX.
                 transitionDelay: ctx.focused ? `${i * 65}ms` : "0ms",
               }}
             >
-              <span className="w-8 flex-shrink-0 pt-0.5 font-mono text-[11px] text-accent/55">
+              <span className="w-10 flex-shrink-0 pt-1 font-mono text-[14px] text-accent/55">
                 {step.num}
               </span>
               <div>
-                <h3 className="font-display text-[15px] font-medium text-white">
+                <h3 className="font-display text-[19px] font-medium text-white">
                   {step.title}
                 </h3>
-                <p className="mt-1.5 text-[13px] leading-[1.7] text-white/40">
+                <p className="mt-2 text-[16px] leading-[1.7] text-white/40">
                   {step.description}
                 </p>
               </div>

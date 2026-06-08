@@ -363,6 +363,76 @@
 }
 
 /*
+ * Star border (React Bits). Two soft radial "stars" sweep along the top and
+ * bottom edges, creating an animated glowing border. Radius/size come from the
+ * caller's classes; the moving glow is clipped to this box via overflow.
+ */
+.star-border {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.star-border__movement {
+  position: absolute;
+  z-index: 0;
+  width: 300%;
+  height: 50%;
+  opacity: 0.7;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.star-border__movement--bottom {
+  bottom: -11px;
+  right: -250%;
+  background: radial-gradient(circle, var(--sb-color, #fff), transparent 10%);
+  animation: star-movement-bottom var(--sb-speed, 6s) linear infinite alternate;
+}
+
+.star-border__movement--top {
+  top: -10px;
+  left: -250%;
+  background: radial-gradient(circle, var(--sb-color, #fff), transparent 10%);
+  animation: star-movement-top var(--sb-speed, 6s) linear infinite alternate;
+}
+
+.star-border__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
+
+@keyframes star-movement-bottom {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+}
+
+@keyframes star-movement-top {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-border__movement--top,
+  .star-border__movement--bottom {
+    animation: none;
+  }
+}
+
+/*
  * Lenis-required document rules. The wrapper (window) needs natural scroll
  * with no anchored snap behavior. We also set color-scheme so the native
  * scrollbar matches the rail-camera dark surface.

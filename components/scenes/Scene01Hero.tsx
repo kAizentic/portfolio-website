@@ -77,7 +77,7 @@ export function Scene01Hero({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
                 transition: "box-shadow 0.7s ease, background-color 0.2s",
               }}
             >
-              View Selected Work
+              View Work
             </button>
             <button
               type="button"

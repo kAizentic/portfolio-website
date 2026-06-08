@@ -30,7 +30,7 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
           <GlareHover
             glareOpacity={0.4}
             glareSize={220}
-            className="h-[220px] w-[180px] flex-shrink-0 rounded-2xl sm:h-[200px] sm:w-[180px]"
+            className="h-[300px] w-[240px] flex-shrink-0 rounded-2xl sm:h-[280px] sm:w-[240px]"
           >
             <div
               role="img"
@@ -45,17 +45,16 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
             animate={{ opacity: ctx.focused ? 1 : 0, y: ctx.focused ? 0 : 8 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            <p className="text-[15px] leading-[1.78] text-white/55">
+            <p className="text-[19px] leading-[1.75] text-white/55">
               I&apos;m an AI product marketing consultant based in Austin, Texas,
               helping B2B technology companies turn complex products into clear
               positioning, sharper go-to-market, and digital experiences that
               convert.
             </p>
-            <p className="text-[14px] leading-[1.75] text-white/38">
+            <p className="text-[17px] leading-[1.72] text-white/38">
               Over the past decade I&apos;ve driven growth across Dell&apos;s
               consumer and financial-services portfolios, led agency delivery for
-              enterprise clients, and now build AI-enabled marketing workflows for
-              Fortune 100 cloud and infrastructure products.
+              enterprise clients, and now build AI-enabled marketing workflows.
             </p>
           </motion.div>
         </div>

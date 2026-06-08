@@ -2,6 +2,7 @@
 
 import { ShinyText } from "@/components/visual-effects/ShinyText";
 import { TiltedCard } from "@/components/visual-effects/TiltedCard";
+import { StarBorder } from "@/components/visual-effects/StarBorder";
 import type { SceneRenderContext } from "@/types/spatial";
 
 const services = [
@@ -40,29 +41,31 @@ export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {services.map((service, i) => (
             <TiltedCard key={service.label}>
-              <div
-                className="h-full rounded-2xl border border-white/[0.07] bg-white/[0.03] p-6 transition-all duration-500"
-                style={{
-                  opacity: ctx.focused ? 1 : 0.65,
-                  transitionDelay: ctx.focused ? `${i * 50}ms` : "0ms",
-                }}
-              >
-                <div className="mb-3 flex items-center gap-2.5">
+              <StarBorder className="h-full rounded-2xl" color="var(--accent)" speed="6s" thickness={2}>
+                <div
+                  className="h-full rounded-2xl border border-white/[0.07] bg-[#0c0c0e] p-8 transition-all duration-500"
+                  style={{
+                    opacity: ctx.focused ? 1 : 0.65,
+                    transitionDelay: ctx.focused ? `${i * 50}ms` : "0ms",
+                  }}
+                >
+                <div className="mb-4 flex items-center gap-3">
                   <span
-                    className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent"
+                    className="h-2 w-2 flex-shrink-0 rounded-full bg-accent"
                     style={{ opacity: ctx.focused ? 1 : 0.5 }}
                   />
-                  <h3 className="font-display text-[14px] font-medium text-white">
+                  <h3 className="font-display text-[19px] font-medium text-white">
                     {service.label}
                   </h3>
                 </div>
-                <p className="text-[13px] leading-[1.7] text-white/40">
+                <p className="text-[16px] leading-[1.7] text-white/40">
                   {service.description}
                 </p>
-              </div>
+                </div>
+              </StarBorder>
             </TiltedCard>
           ))}
         </div>

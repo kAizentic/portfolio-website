@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 import { ShinyText } from "@/components/visual-effects/ShinyText";
 import type { SceneRenderContext } from "@/types/spatial";
@@ -37,7 +38,23 @@ export function Scene06Contact({ ctx }: { ctx: SceneRenderContext }): React.JSX.
 
   return (
     <div className="absolute inset-0 flex flex-col justify-center">
-      <div className="mx-auto w-full max-w-3xl px-6 sm:px-12 lg:px-20">
+      {/* Faint, desaturated portrait anchored to the left — head & shoulders as a
+          subtle background impression, with the right edge softly faded out. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[-10%] top-[8%] z-0 h-[92%] w-[80%] opacity-[0.07] grayscale [mask-image:linear-gradient(to_right,black_55%,transparent)] sm:w-1/2 lg:w-[46%]"
+      >
+        <Image
+          src="/web_banner_profile.jpg"
+          alt=""
+          fill
+          priority={false}
+          sizes="(max-width: 640px) 75vw, 50vw"
+          className="object-cover object-top"
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto w-full max-w-3xl px-6 sm:px-12 lg:px-20">
         <div className="mb-8">
           <p className="mb-3 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
             <ShinyText text="Contact" />

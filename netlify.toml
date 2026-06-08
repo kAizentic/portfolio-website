@@ -1,0 +1,12 @@
+# Netlify build configuration.
+# The repo root is this Next.js app, so no `base` directory is needed.
+# Netlify's Next.js runtime (@netlify/plugin-nextjs) is applied automatically;
+# it serves the `.next` build output. The contact form is registered at build
+# time from public/__forms.html (Netlify Forms).
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
