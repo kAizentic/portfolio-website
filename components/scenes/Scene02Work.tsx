@@ -17,7 +17,7 @@ const projects: WorkCaseStudy[] = [
     art: "velocity",
     image: "/exacache-hero.png",
     summary:
-      "For Technology Pathfinders Consulting — a global cloud infrastructure firm — I led go-to-market for ExaCache (an S3 caching layer that sits on GPU clusters to cut input stalls and recover GPU spend) alongside a ground-up redesign of the company website (tpc.cloud). I built AI-enabled research and drafting workflows that compressed weeks of positioning into a sharp, GPU-efficiency-led narrative — \"Fix the pipeline. Train models faster.\" — delivering a complete strategic brief and messaging framework in under two days. I then carried that positioning through the full site: information architecture and navigation, all copywriting, and a branded visual system that presents their cloud infrastructure expertise to enterprise buyers.",
+      "A global cloud infrastructure firm needed both a sharper go-to-market story and a stronger web presence. I led positioning for ExaCache, an S3 caching layer that sits directly on GPU clusters to cut input stalls and recover wasted GPU spend, building AI-enabled research and drafting workflows that compressed weeks of work into a tight, efficiency-led narrative: “Fix the pipeline. Train models faster.” The full strategic brief and messaging framework came together in under two days. I then carried that positioning into a ground-up redesign of the company website (tpc.cloud), shaping its information architecture and navigation, writing all of the copy, and building a branded visual system that presents its cloud infrastructure expertise to enterprise buyers.",
   },
   {
     title: "Dell Financial Services",
