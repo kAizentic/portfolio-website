@@ -12,6 +12,7 @@
 import { useEffect, useRef } from "react";
 
 import { useSpatialController } from "@/components/spatial/SpatialControllerContext";
+import { Folder } from "@/components/visual-effects/Folder";
 
 const ANIMATION_TIME = 600;
 const PARTICLE_COUNT = 15;
@@ -223,6 +224,20 @@ export function SceneNav(): React.JSX.Element | null {
         <span className="effect filter" ref={filterRef} />
         <span className="effect text" ref={textRef} />
       </div>
+
+      {/* Résumé folder, pinned to the right of the centered nav. */}
+      <a
+        href="/reference/Michael_Ryan_McConnell_Resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View résumé (PDF, opens in a new tab)"
+        className="group absolute right-6 top-1/2 hidden -translate-y-1/2 items-center gap-2.5 sm:flex"
+      >
+        <Folder color="#7C3AED" size={0.4} />
+        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 transition-colors group-hover:text-white">
+          Resume
+        </span>
+      </a>
 
       {/*
        * Alpha-channel goo filter: sharpens the blurred shapes' alpha to merge
