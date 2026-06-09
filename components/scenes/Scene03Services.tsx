@@ -29,8 +29,16 @@ const services = [
 ];
 
 export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
+  const flow = ctx.layout === "flow";
+  const focused = flow || ctx.focused;
   return (
-    <div className="absolute inset-0 flex flex-col justify-center">
+    <div
+      className={
+        flow
+          ? "relative w-full py-20"
+          : "absolute inset-0 flex flex-col justify-center"
+      }
+    >
       <div className="mx-auto w-full max-w-5xl px-6 sm:px-12 lg:px-20">
         <div className="mb-8">
           <p className="mb-3 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
@@ -42,20 +50,20 @@ export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {services.map((service, i) => (
-            <TiltedCard key={service.label}>
+          {services.map((service, i) => {
+            const card = (
               <StarBorder className="h-full rounded-2xl" color="var(--accent)" speed="6s" thickness={2}>
                 <div
                   className="h-full rounded-2xl border border-white/[0.07] bg-[#0c0c0e] p-8 transition-all duration-500"
                   style={{
-                    opacity: ctx.focused ? 1 : 0.65,
-                    transitionDelay: ctx.focused ? `${i * 50}ms` : "0ms",
+                    opacity: focused ? 1 : 0.65,
+                    transitionDelay: focused ? `${i * 50}ms` : "0ms",
                   }}
                 >
                 <div className="mb-4 flex items-center gap-3">
                   <span
                     className="h-2 w-2 flex-shrink-0 rounded-full bg-accent"
-                    style={{ opacity: ctx.focused ? 1 : 0.5 }}
+                    style={{ opacity: focused ? 1 : 0.5 }}
                   />
                   <h3 className="font-display text-[19px] font-medium text-white">
                     {service.label}
@@ -66,8 +74,14 @@ export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX
                 </p>
                 </div>
               </StarBorder>
-            </TiltedCard>
-          ))}
+            );
+            // Pointer-driven tilt is desktop-only; render flat cards in flow mode.
+            return flow ? (
+              <div key={service.label}>{card}</div>
+            ) : (
+              <TiltedCard key={service.label}>{card}</TiltedCard>
+            );
+          })}
         </div>
       </div>
     </div>

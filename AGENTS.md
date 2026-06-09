@@ -16,6 +16,19 @@ labels, and documentation. Engineering identifiers stay (`SceneFrame`,
 `SceneLayer`, `travelDepth`, `navigationState`); user-facing language uses
 the rail-camera vocabulary.
 
+## Desktop rail vs. mobile flow
+
+The rail-camera model and every invariant below describe the **desktop tree**
+(`SpatialViewport`, viewport ≥ Tailwind `md`). On phones (`< md`),
+`app/page.tsx` mounts a completely separate **`MobilePortfolio`** tree: the
+same six scenes stacked as a traditional continuous-scroll page, with **no
+Lenis, controller, or rebase model**. The two trees share scene components and
+the `portfolioConfig`, not runtime state. A scene renders for whichever tree
+asks via `ctx.layout` (`"rail"` | `"flow"`) and navigates via `ctx.navigateTo`
+(rail travel on desktop, scroll-jump on mobile) — see the "Responsive layout"
+section in `CLAUDE.md` for the full contract. The invariants here constrain the
+rail; they do not apply to the flow tree, which mounts none of that machinery.
+
 ## Key invariants for future changes
 
 1. **One depth controller.** All four input modes (manual scroll, docking,

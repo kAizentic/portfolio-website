@@ -36,15 +36,18 @@ Playwright starts its own `next dev -p 3210` server automatically when none is r
 ### Component tree
 
 ```
-app/page.tsx
-  └─ SpatialViewport          # mounts ReactLenis + provides SpatialConfig
-       └─ SpatialControllerProvider   # single source of truth for camera state
-            ├─ ScrollSurface          # physical tall div (physicalLoopCopies × loopLengthPx)
-            ├─ SceneLayer             # positions SceneFrames in viewport space
-            │    └─ SceneFrame ×N     # per-anchor motion shell; derives from travelDepth MV
-            ├─ SceneNav               # encounter-index buttons → actions.travelTo()
-            ├─ DiagnosticOverlay      # telemetry; reads DiagnosticSnapshot at ~30 fps
-            └─ EnvironmentLayer       # atmospheric backdrop / parallax depth cues
+app/page.tsx                  # useIsMobile() branch (see "Responsive layout")
+  ├─ SpatialViewport          # DESKTOP (≥ md): mounts ReactLenis + provides SpatialConfig
+  │    └─ SpatialControllerProvider   # single source of truth for camera state
+  │         ├─ ScrollSurface          # physical tall div (physicalLoopCopies × loopLengthPx)
+  │         ├─ SceneLayer             # positions SceneFrames in viewport space
+  │         │    └─ SceneFrame ×N     # per-anchor motion shell; derives from travelDepth MV
+  │         ├─ SceneNav               # encounter-index buttons → actions.travelTo()
+  │         ├─ DiagnosticOverlay      # telemetry; reads DiagnosticSnapshot at ~30 fps
+  │         └─ EnvironmentLayer       # atmospheric backdrop / parallax depth cues
+  └─ MobilePortfolio          # MOBILE (< md): continuous-page layout, no rail
+       ├─ MobileNav           # sticky header: section links → scroll-jump
+       └─ <section> ×N        # each scene rendered with layout:"flow"
 ```
 
 ### Data flow
@@ -53,6 +56,41 @@ app/page.tsx
 - **High-frequency state in refs**: All per-tick values (`renderScrollPx`, `rebaseOffsetDepth`, `velocity`, etc.) live in a single `refs.current` object. React state (`focusedAnchorIndex`, `navigationState`, `manualDockPending`, `initialized`) is only updated when values change at the interaction boundary.
 - **Lenis is the clock**: `useLenis(callback)` subscribes to every Lenis tick. The callback reads `lenisInstance.animatedScroll`, computes `travelDepth`, updates refs, and calls `travelDepth.set(...)`.
 - **All programmatic travel routes through `programmaticScrollOptions`** — this sets `lerp: 0` so Lenis's duration+easing path is authoritative. Manual wheel/touch goes through Lenis's own pipeline (lerp = 0.1, no `programmatic: true`).
+
+### Responsive layout (desktop rail vs. mobile flow)
+
+`app/page.tsx` chooses one of two entirely separate trees from the **same**
+`portfolioConfig`, based on `useIsMobile()` (`hooks/useIsMobile.ts`,
+`max-width: 767px` — below Tailwind's `md`, i.e. phones only):
+
+- **Desktop (≥ md): `SpatialViewport`** — the rail-camera experience described
+  above, completely unchanged.
+- **Mobile (< md): `MobilePortfolio`** (`components/mobile/`) — the six scenes
+  stacked as normal-flow `<section>`s with native scrolling. **No Lenis, no
+  `SpatialControllerProvider`, no rebase model is mounted.** Navigation
+  (`MobileNav` links + hero CTAs) scroll-jumps to `#encounter-{anchorIndex}`.
+
+`useIsMobile()` returns `null` for the server render and the first hydration
+pass; `page.tsx` shows a neutral backdrop until it resolves, so the heavy rail
+is never mounted on a phone (or vice-versa) before the viewport is known.
+
+**How one scene component serves both trees.** `SceneRenderContext` carries a
+`layout: "rail" | "flow"` flag (undefined ⇒ rail) and a `navigateTo(anchorIndex)`
+callback:
+
+| | `layout: "rail"` (desktop) | `layout: "flow"` (mobile) |
+|---|---|---|
+| Set by | `SceneFrame` | `MobilePortfolio` |
+| Scene root | `absolute inset-0`, centered | `relative w-full`, natural height |
+| `focused` gating | from `travelDepth` | forced `true` (always visible) |
+| `navigateTo` | `actions.travelTo` (rail travel) | scroll-jump to section |
+
+Each scene reads `const flow = ctx.layout === "flow"` and branches its root
+class + `focused`. Flow-only simplifications (per product decision): the hero
+drops its WebGL `LiquidEtherBackground`, `Scene02Work` swaps the paginated
+carousel for a stacked list, and pointer-tilt (`TiltedCard`) renders flat.
+Copy lives once in the scene components — the mobile tree reuses them, it does
+not duplicate content. When adding/editing a scene, keep both branches working.
 
 ### Configuration layer
 

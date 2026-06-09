@@ -14,8 +14,16 @@ const stats = [
 ];
 
 export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
+  const flow = ctx.layout === "flow";
+  const focused = flow || ctx.focused;
   return (
-    <div className="absolute inset-0 flex flex-col justify-center">
+    <div
+      className={
+        flow
+          ? "relative w-full py-20"
+          : "absolute inset-0 flex flex-col justify-center"
+      }
+    >
       <div className="mx-auto w-full max-w-5xl px-6 sm:px-12 lg:px-20">
         <div className="mb-8">
           <p className="mb-3 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
@@ -42,7 +50,7 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
           <motion.div
             className="flex flex-col gap-4"
             initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: ctx.focused ? 1 : 0, y: ctx.focused ? 0 : 8 }}
+            animate={{ opacity: focused ? 1 : 0, y: focused ? 0 : 8 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
             <p className="text-[19px] leading-[1.75] text-white/55">
@@ -60,17 +68,17 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
         </div>
 
         <div
-          className="mt-8 flex gap-10 border-t pt-6 transition-all duration-500"
+          className="mt-8 flex flex-wrap gap-x-6 gap-y-5 border-t pt-6 transition-all duration-500 sm:gap-10"
           style={{
             borderColor: "var(--border-subtle)",
-            opacity: ctx.focused ? 1 : 0.6,
+            opacity: focused ? 1 : 0.6,
           }}
         >
           {stats.map((stat) => (
             <div key={stat.label}>
               <span className="font-display text-[34px] font-semibold text-accent">
                 {stat.prefix}
-                <CountUp to={stat.value} startWhen={ctx.focused} separator="," />
+                <CountUp to={stat.value} startWhen={focused} separator="," />
                 {stat.suffix}
               </span>
               <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-white/35">

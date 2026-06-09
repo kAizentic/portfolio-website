@@ -13,6 +13,8 @@ type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
 export function Scene06Contact({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
   const [status, setStatus] = useState<SubmitStatus>("idle");
+  const flow = ctx.layout === "flow";
+  const focused = flow || ctx.focused;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
@@ -37,7 +39,13 @@ export function Scene06Contact({ ctx }: { ctx: SceneRenderContext }): React.JSX.
   }
 
   return (
-    <div className="absolute inset-0 flex flex-col justify-center">
+    <div
+      className={
+        flow
+          ? "relative w-full py-20"
+          : "absolute inset-0 flex flex-col justify-center"
+      }
+    >
       {/* Faint, desaturated portrait anchored to the left — head & shoulders as a
           subtle background impression, with the right edge softly faded out. */}
       <div
@@ -75,7 +83,7 @@ export function Scene06Contact({ ctx }: { ctx: SceneRenderContext }): React.JSX.
           netlify-honeypot="bot-field"
           className="flex flex-col gap-4"
           onSubmit={handleSubmit}
-          style={{ opacity: ctx.focused ? 1 : 0.75, transition: "opacity 0.5s" }}
+          style={{ opacity: focused ? 1 : 0.75, transition: "opacity 0.5s" }}
         >
           <input type="hidden" name="form-name" value={FORM_NAME} />
           <p hidden>
@@ -125,7 +133,7 @@ export function Scene06Contact({ ctx }: { ctx: SceneRenderContext }): React.JSX.
               disabled={status === "submitting" || status === "success"}
               className="rounded-full bg-accent px-7 py-3 text-[13px] font-medium tracking-wide text-white transition-all hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
               style={{
-                boxShadow: ctx.focused ? "0 0 28px var(--accent-glow)" : "none",
+                boxShadow: focused ? "0 0 28px var(--accent-glow)" : "none",
                 transition: "box-shadow 0.6s ease, background-color 0.2s",
               }}
             >

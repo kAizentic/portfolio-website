@@ -220,6 +220,22 @@ export interface MotionTokens {
  */
 export interface SceneRenderContext {
   scene: SceneManifestEntry;
+  /**
+   * Presentation layout for the injected scene content.
+   *   "rail" — desktop rail-camera mode (the SceneFrame owns positioning via
+   *            absolute inset-0 + 3D transforms; content gates on `focused`).
+   *   "flow" — mobile continuous-page mode (the scene lays itself out in normal
+   *            document flow at natural height; content is always visible).
+   * Undefined is treated as "rail" so existing rail callers are unaffected.
+   */
+  layout?: "rail" | "flow";
+  /**
+   * Navigate to another encounter anchor. On the rail this routes through
+   * `actions.travelTo` (looped camera travel); in flow mode it scroll-jumps to
+   * the corresponding section. Scenes with cross-section CTAs use this instead
+   * of reaching into the controller directly.
+   */
+  navigateTo?: (anchorIndex: number) => void;
   /** anchorIndex * sceneGap. */
   baseAnchorDepth: number;
   /** closestEquivalentAnchor(travelDepth, baseAnchorDepth, loopLength). */

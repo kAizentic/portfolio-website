@@ -125,6 +125,58 @@ const slideVariants = {
   exit: (direction: number) => ({ opacity: 0, x: direction > 0 ? -40 : 40 }),
 };
 
+/**
+ * A single project card. `tilt` wraps it in the pointer-driven TiltedCard
+ * (desktop only); the flow page renders it flat. The clickable body and its
+ * contents are identical in both layouts so the copy stays single-sourced.
+ */
+function WorkCard({
+  project,
+  focused,
+  onSelect,
+  tilt,
+}: {
+  project: WorkCaseStudy;
+  focused: boolean;
+  onSelect: (project: WorkCaseStudy) => void;
+  tilt: boolean;
+}): React.JSX.Element {
+  const body = (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => onSelect(project)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(project);
+        }
+      }}
+      aria-label={`Open ${project.title} case study`}
+      className="group h-full cursor-pointer rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.05]"
+      style={{
+        opacity: focused ? 1 : 0.7,
+        transition: "opacity 0.5s ease, border-color 0.2s, background-color 0.2s",
+      }}
+    >
+      <div className="relative mb-4 h-[110px] overflow-hidden rounded-xl bg-white/[0.05]">
+        <WorkCardThumb motif={project.art} image={project.image} title={project.title} />
+      </div>
+      <div className="flex items-end justify-between">
+        <div>
+          <h3 className="font-display text-[14px] font-medium text-white">
+            {project.title}
+          </h3>
+          <span className="text-[12px] text-white/35">{project.category}</span>
+        </div>
+        <span className="font-mono text-[11px] text-white/20">{project.year}</span>
+      </div>
+    </div>
+  );
+
+  return tilt ? <TiltedCard>{body}</TiltedCard> : body;
+}
+
 function Chevron({ direction }: { direction: "left" | "right" }): React.JSX.Element {
   return (
     <svg
@@ -151,6 +203,8 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
   // [pageIndex, slideDirection] — direction drives the enter/exit offset sign.
   const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
   const [selected, setSelected] = useState<WorkCaseStudy | null>(null);
+  const flow = ctx.layout === "flow";
+  const focused = flow || ctx.focused;
 
   function paginate(dir: number): void {
     setPage(([prev]) => [(prev + dir + PAGE_COUNT) % PAGE_COUNT, dir]);
@@ -158,6 +212,42 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
 
   const start = page * PAGE_SIZE;
   const visible = projects.slice(start, start + PAGE_SIZE);
+
+  // Mobile flow: the paginated carousel becomes one continuous, tappable list
+  // of every project — traditional vertical scroll, no chevrons or tilt.
+  if (flow) {
+    return (
+      <div className="relative w-full py-20">
+        <div className="mx-auto w-full max-w-6xl px-6">
+          <div className="mb-8">
+            <p className="mb-2 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
+              <ShinyText text="Portfolio" />
+            </p>
+            <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
+              Selected Works
+            </h2>
+            <span className="mt-1 block font-mono text-[13px] uppercase tracking-[0.25em] text-white/25">
+              2014 – Present
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5">
+            {projects.map((project) => (
+              <WorkCard
+                key={project.title}
+                project={project}
+                focused={focused}
+                onSelect={setSelected}
+                tilt={false}
+              />
+            ))}
+          </div>
+        </div>
+
+        <WorkCaseStudyModal project={selected} onClose={() => setSelected(null)} />
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 flex flex-col justify-center">
@@ -208,38 +298,13 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
                 className="grid grid-cols-1 gap-6 sm:grid-cols-2"
               >
                 {visible.map((project) => (
-                  <TiltedCard key={project.title}>
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setSelected(project)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setSelected(project);
-                        }
-                      }}
-                      aria-label={`Open ${project.title} case study`}
-                      className="group h-full cursor-pointer rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.05]"
-                      style={{
-                        opacity: ctx.focused ? 1 : 0.7,
-                        transition: "opacity 0.5s ease, border-color 0.2s, background-color 0.2s",
-                      }}
-                    >
-                      <div className="relative mb-4 h-[110px] overflow-hidden rounded-xl bg-white/[0.05]">
-                        <WorkCardThumb motif={project.art} image={project.image} title={project.title} />
-                      </div>
-                      <div className="flex items-end justify-between">
-                        <div>
-                          <h3 className="font-display text-[14px] font-medium text-white">
-                            {project.title}
-                          </h3>
-                          <span className="text-[12px] text-white/35">{project.category}</span>
-                        </div>
-                        <span className="font-mono text-[11px] text-white/20">{project.year}</span>
-                      </div>
-                    </div>
-                  </TiltedCard>
+                  <WorkCard
+                    key={project.title}
+                    project={project}
+                    focused={ctx.focused}
+                    onSelect={setSelected}
+                    tilt
+                  />
                 ))}
               </motion.div>
             </AnimatePresence>

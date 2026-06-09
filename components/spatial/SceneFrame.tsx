@@ -39,6 +39,7 @@ interface SceneFrameProps {
 export function SceneFrame({ scene }: SceneFrameProps): React.JSX.Element {
   const {
     config,
+    actions,
     loopLength,
     travelDepth,
     state: { focusedAnchorIndex, reducedMotion },
@@ -114,10 +115,17 @@ export function SceneFrame({ scene }: SceneFrameProps): React.JSX.Element {
   });
 
   // Keep the `focused` flag in renderCtx in sync with React state changes
-  // even if travelDepth hasn't ticked since the last focus change.
+  // even if travelDepth hasn't ticked since the last focus change. Also thread
+  // the rail-mode layout tag and cross-anchor navigation (camera travel) so
+  // scene content uses the same `ctx.navigateTo` contract as the flow page.
   const renderCtxWithFocus = useMemo(
-    () => ({ ...renderCtx, focused }),
-    [renderCtx, focused]
+    () => ({
+      ...renderCtx,
+      focused,
+      layout: "rail" as const,
+      navigateTo: actions.travelTo,
+    }),
+    [renderCtx, focused, actions]
   );
 
   return (
