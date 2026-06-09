@@ -116,3 +116,18 @@ not duplicate content. When adding/editing a scene, keep both branches working.
 ### Next.js version note
 
 This project uses **Next.js 16**, which has breaking changes from earlier versions. Before editing any Next.js-specific code, read the relevant guide in `node_modules/next/dist/docs/`.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+Graph-first protocol (added — verified by a Phase 0 diagnostic: 6/8 questions correct, 0 hallucinated edges, ~10–35× fewer tokens than reading files):
+- **Before editing any symbol, run the blast-radius check:** `python graphify-orient.py blast "<symbol>"` (wraps `graphify affected "<symbol>"` — the graph maintained by the hooks/watcher is undirected, so this returns the impacted *neighborhood* (importers/callers plus callees): a conservative, possibly over-broad "what to check before editing" set, never an under-set. This is the canonical "what might break if I change this" query. At session start, `python graphify-orient.py orient` prints the freshness verdict + god-node/community map.
+- **Trust the graph only when it is fresh.** `orient`/`blast` print `GROUND TRUTH` vs `HINT` by comparing `graph.json`'s `built_at_commit` to `git HEAD` (and checking the `needs_update` flag + dirty working tree). On `HINT`, treat graph answers as hints and verify changed files directly. Post-commit and post-checkout hooks auto-rebuild the AST graph; for continuous freshness during active editing run `python -m graphify.watch . --debounce 3` in the background (AST, no LLM, catches uncommitted edits).
+- **Know the graph's boundary.** It is authoritative for function/import/call structure (blast radius, traces, consumers). It **under-recalls non-function value bindings** (const/options objects) and **field/property-level data flow** (e.g. "who reads this MotionValue"). An empty `affected` result is NOT proof nothing uses the symbol — fall back to `grep` for those cases.
