@@ -38,14 +38,23 @@ def freshness():
     head = _git("rev-parse", "HEAD")
     if not built:
         return "HINT", "graph.json has no built_at_commit stamp"
+    code = (".ts", ".tsx", ".js", ".jsx")
+    # Uncommitted code edits in the working tree -- checked regardless of HEAD position.
+    dirty_code = [l[3:].strip() for l in _git("status", "--porcelain").splitlines()
+                  if l.strip().endswith(code)]
+    # Code committed since the graph was built (HEAD has moved past built_at_commit).
+    changed_code, noncode = [], 0
     if built != head:
-        changed = _git("diff", "--name-only", built, "HEAD")
-        return "HINT", f"graph built at {built[:7]} but HEAD is {head[:7]}; changed:\n{changed or '(unknown)'}"
-    dirty = [l for l in _git("status", "--porcelain").splitlines()
-             if l[-3:].strip().endswith((".ts", ".tsx", ".js", ".jsx"))]
-    if dirty:
-        return "HINT", "graph matches HEAD but working tree has uncommitted code edits:\n" + "\n".join(dirty)
-    return "GROUND TRUTH", f"graph.json built_at_commit == HEAD ({head[:7]}), tree clean"
+        changed = [f for f in _git("diff", "--name-only", built, "HEAD").splitlines() if f]
+        changed_code = [f for f in changed if f.endswith(code)]
+        noncode = len(changed) - len(changed_code)
+    if dirty_code or changed_code:
+        detail = f"graph built at {built[:7]}, HEAD {head[:7]}; code out of sync:"
+        detail += "".join(f"\n  committed:   {f}" for f in changed_code)
+        detail += "".join(f"\n  uncommitted: {f}" for f in dirty_code)
+        return "HINT", detail
+    note = "tree clean" if built == head else f"{noncode} non-code change(s) since build; code topology unchanged"
+    return "GROUND TRUTH", f"built_at_commit {built[:7]} vs HEAD {head[:7]} ({note})"
 
 
 def _print_verdict():
