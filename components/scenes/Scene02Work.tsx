@@ -17,7 +17,7 @@ const projects: WorkCaseStudy[] = [
     art: "velocity",
     image: "/exacache-hero.png",
     summary:
-      "A global cloud infrastructure firm needed both a sharper go-to-market story and a stronger web presence. I led positioning for ExaCache, an S3 caching layer that sits directly on GPU clusters to cut input stalls and recover wasted GPU spend, building AI-enabled research and drafting workflows that compressed weeks of work into a tight, efficiency-led narrative: “Fix the pipeline. Train models faster.” The full strategic brief and messaging framework came together in under two days. I then carried that positioning into a ground-up redesign of the company website (tpc.cloud), shaping its information architecture and navigation, writing all of the copy, and building a branded visual system that presents its cloud infrastructure expertise to enterprise buyers.",
+      "I led positioning for ExaCache — an S3 caching layer that sits on GPU clusters to cut input stalls and recover wasted GPU spend — using AI-enabled workflows to land the strategic brief and messaging in under two days. I then redesigned the company website (tpc.cloud) end to end: information architecture, all copy, and a branded visual system aimed at enterprise buyers.",
   },
   {
     title: "Dell Financial Services",
