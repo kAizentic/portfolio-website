@@ -1,18 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { ShinyText } from "@/components/visual-effects/ShinyText";
 import { TiltedCard } from "@/components/visual-effects/TiltedCard";
-import { useTheme } from "@/components/theme/theme";
 import type { SceneRenderContext } from "@/types/spatial";
-
-// React Bits "Electric Border" — canvas-based, so load it client-only like the
-// other vendored effects.
-const ElectricBorder = dynamic(
-  () => import("@/components/visual-effects/ElectricBorder"),
-  { ssr: false },
-);
 
 const services = [
   {
@@ -40,9 +30,6 @@ const services = [
 export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX.Element {
   const flow = ctx.layout === "flow";
   const focused = flow || ctx.focused;
-  // Canvas strokeStyle needs a concrete color (not a CSS var); use the accent
-  // hex for the active theme — electric violet on dark, slate on light.
-  const electricColor = useTheme() === "light" ? "#5c6c82" : "#7c3aed";
   return (
     <div
       className={
@@ -64,32 +51,26 @@ export function Scene03Services({ ctx }: { ctx: SceneRenderContext }): React.JSX
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {services.map((service, i) => {
             const card = (
-              <ElectricBorder
-                className="h-full"
-                color={electricColor}
-                speed={1}
-                chaos={0.05}
-                borderRadius={16}
+              <div
+                className="h-full rounded-2xl border border-ink/[0.07] bg-card p-8"
                 style={{
-                  // Staggered fade-in of the whole card (border + content) once
-                  // the rail snaps the frame into focus.
+                  // Staggered fade-in of the card once the rail snaps the frame
+                  // into focus.
                   opacity: focused ? 1 : 0,
                   transition: "opacity 900ms ease",
                   transitionDelay: focused ? `${i * 70}ms` : "0ms",
                 }}
               >
-                <div className="h-full rounded-2xl border border-ink/[0.07] bg-card p-8">
-                  <div className="mb-4 flex items-center gap-3">
-                    <span className="h-2 w-2 flex-shrink-0 rounded-full bg-accent" />
-                    <h3 className="font-display text-[19px] font-medium text-ink">
-                      {service.label}
-                    </h3>
-                  </div>
-                  <p className="text-[16px] leading-[1.7] text-ink/40">
-                    {service.description}
-                  </p>
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="h-2 w-2 flex-shrink-0 rounded-full bg-accent" />
+                  <h3 className="font-display text-[19px] font-medium text-ink">
+                    {service.label}
+                  </h3>
                 </div>
-              </ElectricBorder>
+                <p className="text-[16px] leading-[1.7] text-ink/40">
+                  {service.description}
+                </p>
+              </div>
             );
             // Pointer-driven tilt is desktop-only; render flat cards in flow mode.
             return flow ? (

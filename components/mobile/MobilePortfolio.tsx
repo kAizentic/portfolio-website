@@ -18,7 +18,7 @@
 import { useCallback } from "react";
 
 import { MobileNav } from "@/components/mobile/MobileNav";
-import { PencilSketchField } from "@/components/visual-effects/PencilSketchField";
+import { ConcentricFrameFieldFlow } from "@/components/visual-effects/ConcentricFrameFieldFlow";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { SceneRenderContext, SpatialConfig } from "@/types/spatial";
 
@@ -50,7 +50,7 @@ export function MobilePortfolio({
       data-display-mode={config.displayMode}
       className="relative min-h-dvh w-full bg-background text-ink"
     >
-      <PencilSketchField />
+      <ConcentricFrameFieldFlow />
       <MobileNav scenes={config.scenes} onNavigate={navigateTo} />
 
       <main>

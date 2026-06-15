@@ -23,7 +23,7 @@ const HERO_ANCHOR_INDEX = 0;
  * context (not one per scene), gated behind the scene layer at z-0. It fades
  * out while the Hero is focused so the Hero's fluid look is preserved, and
  * fades back in for the other five sections. Desktop + dark theme only; light
- * theme shows the PencilSketchField instead.
+ * theme shows the ConcentricFrameField instead.
  */
 function LightRaysBackgroundImpl(): React.JSX.Element | null {
   const reduced = useReducedMotion();

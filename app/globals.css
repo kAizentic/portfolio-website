@@ -634,30 +634,30 @@ html[data-theme="light"] body {
 }
 
 /*
- * Pencil-sketch background (light theme). Each doodle drifts a few pixels on
- * its own slow cycle; the hand-drawn "boil" comes from the SVG displacement
- * filter whose seed is cycled by PencilSketchField.
+ * Concentric framing-ring background (light theme). The whole nest of rings
+ * breathes slowly in unison so the field feels alive even while a section is
+ * docked — every ring follows the same shape change. The scroll-linked
+ * "roll in" convergence (scale + rotation) is applied separately, per ring, by
+ * the host components (ConcentricFrameField / ConcentricFrameFieldFlow).
  */
-@keyframes pencil-drift {
+@keyframes frame-breathe {
   0%,
   100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: scale(1) rotate(0deg);
   }
   50% {
-    transform: translate(var(--drift-x, 5px), var(--drift-y, -7px))
-      rotate(var(--drift-r, 1.2deg));
+    transform: scale(1.012) rotate(0.6deg);
   }
 }
 
-.pencil-doodle {
-  animation: pencil-drift var(--drift-dur, 11s) ease-in-out infinite;
-  animation-delay: var(--drift-delay, 0s);
+.frame-nest {
+  animation: frame-breathe 18s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pencil-doodle {
+  .frame-nest {
     animation: none;
   }
 }

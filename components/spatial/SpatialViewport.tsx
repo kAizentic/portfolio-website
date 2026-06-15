@@ -36,8 +36,8 @@ import { SceneNav } from "@/components/spatial/SceneNav";
 import { ScrollSurface } from "@/components/spatial/ScrollSurface";
 import { SpatialControllerProvider } from "@/components/spatial/SpatialControllerContext";
 import { StandardViewToggle } from "@/components/spatial/StandardViewToggle";
+import { ConcentricFrameField } from "@/components/visual-effects/ConcentricFrameField";
 import { LightRaysBackground } from "@/components/visual-effects/LightRaysBackground";
-import { PencilSketchField } from "@/components/visual-effects/PencilSketchField";
 import { useKeyboardTravel } from "@/hooks/useKeyboardTravel";
 import { assertValidSpatialConfig } from "@/lib/config-validation";
 import type { SpatialConfig } from "@/types/spatial";
@@ -96,9 +96,11 @@ export function SpatialViewport({
       data-display-mode={config.displayMode}
       className="relative min-h-dvh w-full bg-background text-ink"
     >
-      <PencilSketchField />
       <ReactLenis root options={lenisOptions}>
         <SpatialControllerProvider config={config}>
+          {/* Light-theme framing rings: driven by the controller's travelDepth
+              (must mount inside the provider). Dark theme renders neither. */}
+          <ConcentricFrameField />
           <LightRaysBackground />
           <ScrollSurface />
           <SceneLayer />
