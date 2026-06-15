@@ -46,7 +46,7 @@ export function Scene05Process({ ctx }: { ctx: SceneRenderContext }): React.JSX.
           <p className="mb-3 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
             <ShinyText text="Methodology" />
           </p>
-          <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
+          <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-ink">
             How I Work
           </h2>
         </div>
@@ -55,22 +55,26 @@ export function Scene05Process({ ctx }: { ctx: SceneRenderContext }): React.JSX.
           {steps.map((step, i) => (
             <div
               key={step.num}
-              className="flex gap-6 py-5 transition-all duration-500"
+              className="flex gap-6 py-5 transition-all duration-700 ease-out"
               style={{
                 borderBottom:
                   i < steps.length - 1 ? "1px solid var(--border-subtle)" : "none",
-                opacity: focused ? 1 : 0.6,
-                transitionDelay: focused ? `${i * 65}ms` : "0ms",
+                // Each item fades in one after the other on landing (staggered
+                // top→bottom), so the list rolls out item-by-item. The items
+                // themselves do not unroll — just a plain fade with a small slide.
+                opacity: focused ? 1 : 0,
+                transform: focused ? "translateY(0)" : "translateY(-6px)",
+                transitionDelay: focused ? `${i * 160}ms` : "0ms",
               }}
             >
               <span className="w-10 flex-shrink-0 pt-1 font-mono text-[14px] text-accent/55">
                 {step.num}
               </span>
               <div>
-                <h3 className="font-display text-[19px] font-medium text-white">
+                <h3 className="font-display text-[19px] font-medium text-ink">
                   {step.title}
                 </h3>
-                <p className="mt-2 text-[16px] leading-[1.7] text-white/40">
+                <p className="mt-2 text-[16px] leading-[1.7] text-ink/40">
                   {step.description}
                 </p>
               </div>

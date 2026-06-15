@@ -12,6 +12,8 @@
 import { useEffect, useRef } from "react";
 
 import { useSpatialController } from "@/components/spatial/SpatialControllerContext";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useTheme } from "@/components/theme/theme";
 import { Folder } from "@/components/visual-effects/Folder";
 
 const ANIMATION_TIME = 600;
@@ -125,6 +127,7 @@ export function SceneNav(): React.JSX.Element | null {
     state: { initialized, focusedAnchorIndex, navigationState },
   } = useSpatialController();
 
+  const theme = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLUListElement>(null);
   const filterRef = useRef<HTMLSpanElement>(null);
@@ -194,7 +197,7 @@ export function SceneNav(): React.JSX.Element | null {
     <nav
       data-testid="scene-nav"
       aria-label="Encounter anchor index"
-      className="fixed inset-x-0 top-0 z-30 flex justify-center border-b border-white/10 bg-black/55 py-8 backdrop-blur-md"
+      className="fixed inset-x-0 top-0 z-30 flex justify-center border-b border-ink/10 bg-chrome/55 py-8 backdrop-blur-md"
     >
       <div
         ref={containerRef}
@@ -232,7 +235,7 @@ export function SceneNav(): React.JSX.Element | null {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub profile (opens in a new tab)"
-          className="text-white/55 transition-colors hover:text-white"
+          className="text-ink/55 transition-colors hover:text-ink"
         >
           <svg
             width="22"
@@ -252,11 +255,13 @@ export function SceneNav(): React.JSX.Element | null {
           aria-label="View résumé (PDF, opens in a new tab)"
           className="group flex items-center gap-2.5"
         >
-          <Folder color="#7C3AED" size={0.4} />
-          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 transition-colors group-hover:text-white">
+          <Folder color={theme === "light" ? "#5C6C82" : "#7C3AED"} size={0.4} />
+          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/55 transition-colors group-hover:text-ink">
             Resume
           </span>
         </a>
+
+        <ThemeToggle />
       </div>
 
       {/*

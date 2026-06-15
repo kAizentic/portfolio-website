@@ -64,10 +64,10 @@ export function WorkCaseStudyModal({
           aria-modal="true"
           aria-label={`${project.title} case study`}
         >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-scrim backdrop-blur-sm" />
 
           <motion.div
-            className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0d0a18] shadow-2xl"
+            className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-ink/[0.1] bg-modal shadow-2xl"
             initial={{ scale: 0.94, y: 12, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 8, opacity: 0 }}
@@ -78,7 +78,7 @@ export function WorkCaseStudyModal({
               type="button"
               onClick={onClose}
               aria-label="Close case study"
-              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white/60 transition-all duration-200 hover:bg-black/60 hover:text-white"
+              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-chrome/40 text-ink/60 transition-all duration-200 hover:bg-chrome/60 hover:text-ink"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <line x1="6" y1="6" x2="18" y2="18" />
@@ -92,17 +92,17 @@ export function WorkCaseStudyModal({
 
             <div className="p-7">
               <div className="mb-4 flex items-start justify-between gap-4">
-                <h3 className="font-display text-[22px] font-semibold leading-tight tracking-[-0.02em] text-white">
+                <h3 className="font-display text-[22px] font-semibold leading-tight tracking-[-0.02em] text-ink">
                   {project.title}
                 </h3>
-                <span className="mt-1 shrink-0 font-mono text-[12px] text-white/30">
+                <span className="mt-1 shrink-0 font-mono text-[12px] text-ink/30">
                   {project.year}
                 </span>
               </div>
               <p className="mb-4 font-mono text-[12px] uppercase tracking-[0.18em] text-accent">
                 {project.category}
               </p>
-              <p className="text-[15px] leading-[1.75] text-white/55">{project.summary}</p>
+              <p className="text-[15px] leading-[1.75] text-ink/55">{project.summary}</p>
             </div>
           </motion.div>
         </motion.div>

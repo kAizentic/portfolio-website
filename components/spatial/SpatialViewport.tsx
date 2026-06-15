@@ -36,6 +36,8 @@ import { SceneNav } from "@/components/spatial/SceneNav";
 import { ScrollSurface } from "@/components/spatial/ScrollSurface";
 import { SpatialControllerProvider } from "@/components/spatial/SpatialControllerContext";
 import { StandardViewToggle } from "@/components/spatial/StandardViewToggle";
+import { LightRaysBackground } from "@/components/visual-effects/LightRaysBackground";
+import { PencilSketchField } from "@/components/visual-effects/PencilSketchField";
 import { useKeyboardTravel } from "@/hooks/useKeyboardTravel";
 import { assertValidSpatialConfig } from "@/lib/config-validation";
 import type { SpatialConfig } from "@/types/spatial";
@@ -78,6 +80,10 @@ export function SpatialViewport({
       orientation: "vertical",
       wheelMultiplier: signedGain,
       touchMultiplier: signedGain,
+      // Slightly softer than Lenis's 0.1 default so manual wheel/touch glides a
+      // touch more. Manual-only: programmatic travel passes lerp:0 per call and
+      // overrides this, so docking/menu/keyboard navigation is unaffected.
+      lerp: 0.085,
     };
   }, [
     config.motion.manualTravel.inputGain,
@@ -88,10 +94,12 @@ export function SpatialViewport({
     <div
       data-testid="spatial-viewport"
       data-display-mode={config.displayMode}
-      className="relative min-h-dvh w-full bg-[#050507] text-white"
+      className="relative min-h-dvh w-full bg-background text-ink"
     >
+      <PencilSketchField />
       <ReactLenis root options={lenisOptions}>
         <SpatialControllerProvider config={config}>
+          <LightRaysBackground />
           <ScrollSurface />
           <SceneLayer />
           <SceneNav />

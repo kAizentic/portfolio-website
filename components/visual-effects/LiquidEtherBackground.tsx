@@ -3,6 +3,7 @@
 import { memo } from "react";
 import dynamic from "next/dynamic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useTheme } from "@/components/theme/theme";
 
 const LiquidEther = dynamic(() => import("./LiquidEther"), { ssr: false });
 
@@ -13,7 +14,10 @@ const LIQUID_COLORS = ["#5227FF", "#FF9FFC", "#B497CF"];
 
 function LiquidEtherBackgroundImpl(): React.JSX.Element | null {
   const reduced = useReducedMotion();
-  if (reduced) return null;
+  const theme = useTheme();
+  // Dark-theme-only: the violet fluid clashes with the aged-paper light
+  // theme, which shows the pencil-sketch field instead.
+  if (reduced || theme === "light") return null;
 
   return (
     <div

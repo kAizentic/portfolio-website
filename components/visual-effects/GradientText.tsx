@@ -2,12 +2,23 @@
 
 interface GradientTextProps {
   children: React.ReactNode;
-  /** Gradient color stops, left to right. Defaults to the violet brand palette. */
+  /**
+   * Gradient color stops, left to right. Defaults to the theme's brand
+   * palette (`--gt-*` tokens: violet in dark, slate in light).
+   */
   colors?: string[];
   /** Seconds for one full cycle of the gradient slide. */
   animationSpeed?: number;
   className?: string;
 }
+
+const THEME_STOPS = [
+  "var(--gt-a)",
+  "var(--gt-b)",
+  "var(--gt-c)",
+  "var(--gt-d)",
+  "var(--gt-a)",
+];
 
 /**
  * React Bits "Gradient Text" — an animated multi-stop gradient clipped to the
@@ -16,7 +27,7 @@ interface GradientTextProps {
  */
 export function GradientText({
   children,
-  colors = ["#7C3AED", "#c084fc", "#6366f1", "#a78bfa", "#7C3AED"],
+  colors = THEME_STOPS,
   animationSpeed = 8,
   className = "",
 }: GradientTextProps): React.JSX.Element {

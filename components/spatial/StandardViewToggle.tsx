@@ -24,7 +24,7 @@ export function StandardViewToggle(): React.JSX.Element | null {
         aria-disabled="true"
         title="Standard view — coming soon"
         onClick={(event) => event.preventDefault()}
-        className="cursor-not-allowed rounded-full border border-white/20 bg-black/55 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.28em] text-white/60 opacity-70 backdrop-blur-md"
+        className="cursor-not-allowed rounded-full border border-ink/20 bg-chrome/55 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.28em] text-ink/60 opacity-70 backdrop-blur-md"
       >
         Standard view · coming soon
       </button>

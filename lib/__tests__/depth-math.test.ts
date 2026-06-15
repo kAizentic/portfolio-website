@@ -186,23 +186,25 @@ describe("visualMapping", () => {
         Math.pow(t, motionTokens.opacityFalloffExponent);
     expect(m.opacity).toBeCloseTo(expectedOpacity, 8);
 
-    // It is well above the old linear value (1 - t ≈ 0.444), which is what
-    // produced the dark-backdrop showthrough on fast scroll.
-    expect(m.opacity).toBeGreaterThan(0.85);
+    // It stays well above the old linear value (1 - t ≈ 0.444), which is what
+    // produced the dark-backdrop showthrough on fast scroll, while letting a
+    // little atmospheric backdrop breathe through (p=3, balanced).
+    expect(m.opacity).toBeGreaterThan(0.8);
 
-    // Two overlapping midpoint panels cover ≥99% of the backdrop.
+    // Two overlapping midpoint panels still cover the great majority of backdrop.
     const combinedCoverage = 1 - Math.pow(1 - m.opacity, 2);
-    expect(combinedCoverage).toBeGreaterThan(0.99);
+    expect(combinedCoverage).toBeGreaterThan(0.95);
 
-    // Scale/blur stay on the linear ramp (exponent is opacity-only).
+    // Scale/blur follow the smoothstep ramp (the convex exponent is opacity-only).
+    const tEased = t * t * (3 - 2 * t);
     expect(m.scale).toBeCloseTo(
       motionTokens.scaleAt.focus +
-        (motionTokens.scaleAt.far - motionTokens.scaleAt.focus) * t,
+        (motionTokens.scaleAt.far - motionTokens.scaleAt.focus) * tEased,
       8
     );
     expect(m.blurPx).toBeCloseTo(
       motionTokens.blurPxAt.focus +
-        (motionTokens.blurPxAt.far - motionTokens.blurPxAt.focus) * t,
+        (motionTokens.blurPxAt.far - motionTokens.blurPxAt.focus) * tEased,
       8
     );
   });

@@ -24,7 +24,6 @@
 import {
   easeInOutQuint,
   easeOutCubic,
-  easeOutExpo,
   easeOutQuart,
 } from "@/lib/easing";
 import type { MotionTokens } from "@/types/spatial";
@@ -35,13 +34,15 @@ export const motionTokens: MotionTokens = {
   focalPlane: 0,
   windowRadius: 900,
   /**
-   * Convex opacity falloff (p=4): scenes hold near-full opacity through the
-   * midpoint between anchors, eliminating the dark-backdrop "grey flash" on
-   * fast scroll, then fade fast near windowRadius so docked scenes still show
-   * no neighbor bleed. Opacity-only; scale/blur stay linear. Tuning dial:
+   * Convex opacity falloff (p=3, balanced): scenes hold high opacity through the
+   * midpoint between anchors so fast scroll never flashes a bare backdrop, while
+   * letting a bit of the atmospheric backdrop (LightRays / Pencil field) breathe
+   * through mid-transition for a more organic cross-fade. Docked scenes still
+   * show no neighbor bleed (windowRadius < sceneGap keeps t clamped to 1 when
+   * parked). Opacity-only; scale/blur use a smoothstep ramp. Tuning dial:
    * 2 = gentle, 3 = balanced, 4 = aggressive (~1% midpoint showthrough).
    */
-  opacityFalloffExponent: 4,
+  opacityFalloffExponent: 3,
   focusEpsilon: 220,
   perspective: 1400,
 
@@ -96,9 +97,12 @@ export const motionTokens: MotionTokens = {
     /** Default +1: scrolling DOWN advances forward (document convention). */
     forwardScrollSign: 1,
     commitThresholdRatio: 0.22,
-    /** ~0.72s: visible brake into dock; faster than menu hops, slower than old 0.5s snap. */
+    /** ~0.72s: soft glide into dock; faster than menu hops, slower than old 0.5s snap. */
     assistedDockDurationSeconds: 0.72,
-    assistedDockEasing: easeOutExpo,
+    /** easeOutQuart: softer pure-decelerate arrival than easeOutExpo's sharp
+     *  front-loaded brake + sticky tail; also settles within the duration window
+     *  more reliably, so the force-snap-on-timeout hard jump fires less often. */
+    assistedDockEasing: easeOutQuart,
     allowOppositeInputCancellation: true,
   },
 

@@ -301,15 +301,17 @@ export const visualMapping = (
   const absRel = Math.abs(rel);
   const t = clamp(absRel / tokens.windowRadius, 0, 1);
   // Opacity uses a convex curve (t^p) so the midpoint between anchors stays
-  // covered; scale/blur/translateZ keep the linear `t`.
+  // covered. Scale/blur/translateZ use a smoothstep ramp (eased at both ends)
+  // for a softer, more organic onset/exit than a linear ramp.
   const tOpacity = Math.pow(t, tokens.opacityFalloffExponent);
+  const tEased = t * t * (3 - 2 * t);
   const opacity = lerp(tokens.opacityAt.focus, tokens.opacityAt.far, tOpacity);
-  const scale = lerp(tokens.scaleAt.focus, tokens.scaleAt.far, t);
-  const blurPx = lerp(tokens.blurPxAt.focus, tokens.blurPxAt.far, t);
+  const scale = lerp(tokens.scaleAt.focus, tokens.scaleAt.far, tEased);
+  const blurPx = lerp(tokens.blurPxAt.focus, tokens.blurPxAt.far, tEased);
   const translateZMagnitude = lerp(
     tokens.translateZAt.focus,
     tokens.translateZAt.far,
-    t
+    tEased
   );
   const translateZ = rel === 0 ? 0 : translateZMagnitude * Math.sign(rel);
   const pointerEvents: "auto" | "none" =

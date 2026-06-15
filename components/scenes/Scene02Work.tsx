@@ -135,11 +135,13 @@ function WorkCard({
   focused,
   onSelect,
   tilt,
+  index,
 }: {
   project: WorkCaseStudy;
   focused: boolean;
   onSelect: (project: WorkCaseStudy) => void;
   tilt: boolean;
+  index: number;
 }): React.JSX.Element {
   const body = (
     <div
@@ -153,23 +155,25 @@ function WorkCard({
         }
       }}
       aria-label={`Open ${project.title} case study`}
-      className="group h-full cursor-pointer rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.05]"
+      className="group h-full cursor-pointer rounded-2xl border border-ink/[0.08] bg-ink/[0.03] p-5 transition-all duration-300 hover:border-ink/[0.15] hover:bg-ink/[0.05]"
       style={{
-        opacity: focused ? 1 : 0.7,
-        transition: "opacity 0.5s ease, border-color 0.2s, background-color 0.2s",
+        // Fade in once the rail snaps the frame into focus; the per-card delay
+        // lives only on the opacity transition so hover (border/bg) stays snappy.
+        opacity: focused ? 1 : 0,
+        transition: `opacity 0.9s ease ${focused ? index * 80 : 0}ms, border-color 0.2s, background-color 0.2s`,
       }}
     >
-      <div className="relative mb-4 h-[110px] overflow-hidden rounded-xl bg-white/[0.05]">
+      <div className="relative mb-4 h-[110px] overflow-hidden rounded-xl bg-ink/[0.05]">
         <WorkCardThumb motif={project.art} image={project.image} title={project.title} />
       </div>
       <div className="flex items-end justify-between">
         <div>
-          <h3 className="font-display text-[14px] font-medium text-white">
+          <h3 className="font-display text-[14px] font-medium text-ink">
             {project.title}
           </h3>
-          <span className="text-[12px] text-white/35">{project.category}</span>
+          <span className="text-[12px] text-ink/35">{project.category}</span>
         </div>
-        <span className="font-mono text-[11px] text-white/20">{project.year}</span>
+        <span className="font-mono text-[11px] text-ink/20">{project.year}</span>
       </div>
     </div>
   );
@@ -223,22 +227,23 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
             <p className="mb-2 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
               <ShinyText text="Portfolio" />
             </p>
-            <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
+            <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-ink">
               Selected Works
             </h2>
-            <span className="mt-1 block font-mono text-[13px] uppercase tracking-[0.25em] text-white/25">
+            <span className="mt-1 block font-mono text-[13px] uppercase tracking-[0.25em] text-ink/25">
               2014 – Present
             </span>
           </div>
 
           <div className="grid grid-cols-1 gap-5">
-            {projects.map((project) => (
+            {projects.map((project, i) => (
               <WorkCard
                 key={project.title}
                 project={project}
                 focused={focused}
                 onSelect={setSelected}
                 tilt={false}
+                index={i}
               />
             ))}
           </div>
@@ -257,11 +262,11 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
             <p className="mb-2 font-mono text-[22px] uppercase tracking-[0.3em] text-accent">
               <ShinyText text="Portfolio" />
             </p>
-            <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-white">
+            <h2 className="font-display text-[40px] font-semibold tracking-[-0.022em] text-ink">
               Selected Works
             </h2>
           </div>
-          <span className="mb-1 font-mono text-[22px] uppercase tracking-[0.25em] text-white/25">
+          <span className="mb-1 font-mono text-[22px] uppercase tracking-[0.25em] text-ink/25">
             2014 – Present
           </span>
         </div>
@@ -297,13 +302,14 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
                 transition={{ duration: 0.28, ease: "easeOut" }}
                 className="grid grid-cols-1 gap-6 sm:grid-cols-2"
               >
-                {visible.map((project) => (
+                {visible.map((project, i) => (
                   <WorkCard
                     key={project.title}
                     project={project}
                     focused={ctx.focused}
                     onSelect={setSelected}
                     tilt
+                    index={i}
                   />
                 ))}
               </motion.div>
@@ -319,7 +325,7 @@ export function Scene02Work({ ctx }: { ctx: SceneRenderContext }): React.JSX.Ele
               onClick={() => setPage(([prev]) => [i, i > prev ? 1 : -1])}
               aria-label={`Go to projects page ${i + 1}`}
               className={`h-1.5 rounded-full transition-all duration-200 ${
-                i === page ? "w-6 bg-white/60" : "w-1.5 bg-white/20 hover:bg-white/35"
+                i === page ? "w-6 bg-ink/60" : "w-1.5 bg-ink/20 hover:bg-ink/35"
               }`}
             />
           ))}

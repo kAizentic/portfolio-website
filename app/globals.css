@@ -1,8 +1,27 @@
 @import "tailwindcss";
 
+/*
+ * Theme tokens. `:root` holds the dark rail-camera palette (the default and
+ * the exact values the site has always rendered); `html[data-theme="light"]`
+ * swaps every token for the "engineer's sketchbook" light theme: aged paper,
+ * warm ink, and a slate bluish-gray accent. Components reference semantic
+ * Tailwind colors (ink/chrome/card/...) that resolve through these vars, so
+ * the toggle is pure CSS — no per-component branching.
+ */
 :root {
   --background: #050507;
   --foreground: #f4f4f6;
+
+  /* Primary content color — replaces hardcoded `white` in components. */
+  --ink: #ffffff;
+  /* Chrome (nav bars, scrims' base) — replaces hardcoded `black`. */
+  --chrome: #000000;
+  /* Opaque raised surfaces. */
+  --card: #0c0c0e;
+  --modal: #0d0a18;
+  --scrim: rgba(0, 0, 0, 0.7);
+  /* Text on accent-filled controls (buttons, pills). */
+  --on-accent: #ffffff;
 
   /* Accent — electric violet */
   --accent: #7C3AED;
@@ -15,21 +34,70 @@
   --surface-card: rgba(255, 255, 255, 0.03);
   --surface-card-hover: rgba(255, 255, 255, 0.055);
   --border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Effect palettes (ShinyText sweep, GradientText stops). */
+  --shiny-highlight: #ffffff;
+  --gt-a: #7C3AED;
+  --gt-b: #c084fc;
+  --gt-c: #6366f1;
+  --gt-d: #a78bfa;
+
+  --status-error: rgb(248, 113, 113);
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #e8e1ce; /* aged paper */
+  --foreground: #211c12; /* warm ink */
+
+  --ink: #211c12;
+  --chrome: #efe9d8;
+  --card: #efe9da;
+  --modal: #f2eddf;
+  --scrim: rgba(46, 41, 30, 0.45);
+  --on-accent: #f6f2e7;
+
+  /* Accent — slate bluish gray */
+  --accent: #5c6c82;
+  --accent-hover: #4c5b70;
+  --accent-subtle: rgba(92, 108, 130, 0.14);
+  --accent-glow: rgba(92, 108, 130, 0.28);
+  --accent-border: rgba(92, 108, 130, 0.4);
+
+  --surface-card: rgba(33, 28, 18, 0.04);
+  --surface-card-hover: rgba(33, 28, 18, 0.07);
+  --border-subtle: rgba(33, 28, 18, 0.14);
+
+  --shiny-highlight: #2e3a4a;
+  --gt-a: #46566b;
+  --gt-b: #7e92ac;
+  --gt-c: #5c6c82;
+  --gt-d: #8fa1b8;
+
+  --status-error: rgb(176, 64, 50);
 }
 
 @theme inline {
-  --color-background: #050507;
-  --color-foreground: #f4f4f6;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
-  --color-accent: #7C3AED;
-  --color-accent-hover: #6D28D9;
-  --color-accent-subtle: rgba(124, 58, 237, 0.12);
-  --color-accent-glow: rgba(124, 58, 237, 0.35);
-  --color-accent-border: rgba(124, 58, 237, 0.35);
+  --color-ink: var(--ink);
+  --color-chrome: var(--chrome);
+  --color-card: var(--card);
+  --color-modal: var(--modal);
+  --color-scrim: var(--scrim);
+  --color-on-accent: var(--on-accent);
 
-  --color-surface-card: rgba(255, 255, 255, 0.03);
-  --color-surface-card-hover: rgba(255, 255, 255, 0.055);
-  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-border: var(--accent-border);
+
+  --color-surface-card: var(--surface-card);
+  --color-surface-card-hover: var(--surface-card-hover);
+  --color-border-subtle: var(--border-subtle);
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-space-grotesk);
@@ -46,7 +114,7 @@
   background: linear-gradient(
     120deg,
     var(--accent) 40%,
-    #ffffff 50%,
+    var(--shiny-highlight) 50%,
     var(--accent) 60%
   );
   background-size: 200% 100%;
@@ -118,6 +186,30 @@
   --color-2: #a78bfa;
   --color-3: #c084fc;
   --color-4: #6366f1;
+}
+
+/* Light theme: slate particle palette and ink labels (the active pill keeps
+ * light-on-accent text via --on-accent). */
+html[data-theme="light"] .gooey-nav-container {
+  --color-1: #5c6c82;
+  --color-2: #8fa1b8;
+  --color-3: #46566b;
+  --color-4: #5b7a9e;
+}
+
+/* Inactive labels sit black on the paper. Targets the `li` directly so it
+ * overrides the base `.gooey-nav-container ul li { color: white }` rule
+ * (an inherited color on `ul` would not). The active label keeps its
+ * light-on-accent color via the more specific `.active`/`.effect` rules. */
+html[data-theme="light"] .gooey-nav-container ul,
+html[data-theme="light"] .gooey-nav-container ul li {
+  color: #000000;
+}
+
+html[data-theme="light"] .gooey-nav-container ul li.active,
+html[data-theme="light"] .gooey-nav-container .effect.text,
+html[data-theme="light"] .gooey-nav-container .effect.text.active {
+  color: var(--on-accent);
 }
 
 .gooey-nav-container ul {
@@ -534,6 +626,40 @@ body {
   color-scheme: dark;
   scroll-behavior: auto;
   overscroll-behavior: none;
+}
+
+html[data-theme="light"],
+html[data-theme="light"] body {
+  color-scheme: light;
+}
+
+/*
+ * Pencil-sketch background (light theme). Each doodle drifts a few pixels on
+ * its own slow cycle; the hand-drawn "boil" comes from the SVG displacement
+ * filter whose seed is cycled by PencilSketchField.
+ */
+@keyframes pencil-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(var(--drift-x, 5px), var(--drift-y, -7px))
+      rotate(var(--drift-r, 1.2deg));
+  }
+}
+
+.pencil-doodle {
+  animation: pencil-drift var(--drift-dur, 11s) ease-in-out infinite;
+  animation-delay: var(--drift-delay, 0s);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pencil-doodle {
+    animation: none;
+  }
 }
 
 html.lenis,
