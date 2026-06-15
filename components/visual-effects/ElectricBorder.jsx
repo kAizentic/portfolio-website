@@ -157,9 +157,16 @@ const ElectricBorder = ({
     const borderOffset = 60;
 
     const updateSize = () => {
-      const rect = container.getBoundingClientRect();
-      const width = rect.width + borderOffset * 2;
-      const height = rect.height + borderOffset * 2;
+      // Local fix: measure the untransformed *layout* size (offsetWidth/Height)
+      // rather than getBoundingClientRect(), whose result includes ancestor CSS
+      // transforms. This component is rendered inside the rail's SceneFrame,
+      // which applies a per-depth scale + translateZ/perspective transform; a
+      // getBoundingClientRect() measure taken while that frame is off-focus
+      // bakes the transform into the canvas size, so the border ends up too
+      // small/large. offsetWidth/Height keep the canvas locked to the card at
+      // any frame scale.
+      const width = container.offsetWidth + borderOffset * 2;
+      const height = container.offsetHeight + borderOffset * 2;
 
       // Use device pixel ratio for sharp rendering
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
