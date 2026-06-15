@@ -54,7 +54,7 @@ export function Scene04About({ ctx }: { ctx: SceneRenderContext }): React.JSX.El
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
             <p className="text-[19px] leading-[1.75] text-ink/55">
-              I am an AI product marketing consultant based in Austin, Texas,
+              I am a product marketing consultant based in Austin, Texas,
               helping B2B technology companies turn complex products into clear
               positioning, sharper go-to-market, and digital experiences that
               convert.
