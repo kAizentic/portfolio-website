@@ -15,9 +15,10 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Michael Ryan McConnell — AI Product Marketing Consultant",
+  title:
+    "Michael Ryan McConnell — Agentic Workflow Specialist, Product Marketing Consultant",
   description:
-    "AI product marketing consultant helping B2B technology companies with positioning, go-to-market strategy, and digital experiences for AI, cloud, and technical products.",
+    "Agentic workflow specialist and product marketing consultant helping B2B technology companies with positioning, go-to-market strategy, and digital experiences for AI, cloud, and technical products.",
 };
 
 /**
